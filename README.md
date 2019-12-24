@@ -22,3 +22,21 @@ whoami$ yarn start
 //or
 whoami$ npm start
 ```
+
+## Build back environment
+```
+whoami$ cd man_back
+whoami$ cp .env.example .env
+
+whoami$ yarn install
+//or
+whoami$ npm install
+
+whoami$ yarn start
+//or
+whoami$ npm start
+```
+
+## error 
+relation to @babel/core
+plese read https://qiita.com/take_o/items/a81a52d40512ae1984c6
