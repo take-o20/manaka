@@ -4,6 +4,7 @@
 ```
 whoami$ cd man_back
 whoami$ docker-compose up -d
+whoami$ cd database
 whoami$ prisma deploy //this is make database model
 
 ```
