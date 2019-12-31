@@ -1,7 +1,7 @@
-import React, { useLayoutEffect } from "react"
+import React from "react"
+import { useHistory } from "react-router-dom";
 import './Login.css'
 import gql from "graphql-tag";
-import { useQuery} from "@apollo/react-hooks";
 import { useMutation } from '@apollo/react-hooks';
 
 const USER_LOGIN = gql`
@@ -15,25 +15,32 @@ const USER_LOGIN = gql`
 const Login = () => {
   let email
   let password
-  let rel
-  const [ userLogin, {data}] = useMutation(USER_LOGIN);
-  console.log(data)
-  if(data){
-    rel='you have already logined'
-  }else{
-    rel=''
+  const history = useHistory();
+  const [ userLogin,{data, loading, error},] = useMutation(USER_LOGIN);
+
+  const onClick = () => {
+    userLogin({ variables: {email: email.value, password: password.value}})
+    email.value = '';
+    password.value = '';
   }
+  if(!loading && data){
+    localStorage.setItem('token', data.login.token);
+    // localStorage.removeItem('token') signOutの時
+    history.push("/home");
+  }
+  let errorMessage
+  if(!loading && error){
+    errorMessage = error.message
+  }
+
   return (
     <div className="Login">
       <h2>Login</h2>
       <form
           onSubmit={e => {
           e.preventDefault();
-          userLogin({ variables: {email: email.value, password: password.value}})
-          email.value = '';
-          password.value = '';
+          onClick();
           }}
-          action={rel}
         >
         <p>
           email：
@@ -52,8 +59,8 @@ const Login = () => {
         </p>
           <td><button type="submit">Login</button></td>
         </form>
-        { 
-        rel ? <h2 style={{color:"red", margin:"20"}}>{rel}</h2>:""}
+        {loading && <p>Loading...</p>}
+        {error && <p>{errorMessage}</p>}        
     </div>
   );
 }

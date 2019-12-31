@@ -7,14 +7,15 @@ import { HttpLink } from 'apollo-link-http';
 import { ApolloLink, from } from 'apollo-link';
 import { setContext } from 'apollo-link-context';
 import { InMemoryCache } from 'apollo-cache-inmemory';
+import { onError } from "apollo-link-error";
 
 // for routing
-import { BrowserRouter, Route, Link } from "react-router-dom";
+import { BrowserRouter, Route, Link, Switch } from "react-router-dom";
 
 import  Home  from "./Home/Home"
 import Login from './Login/Login'
 import SignUp from './SignUp/SignUp'
-import LoginedExample from './LoginedExample/LoginedExample'
+import Auth from './Auth/Auth'
 
 const httpLink = new HttpLink({ uri: process.env.REACT_APP_GRAPHQL_END});
 
@@ -38,31 +39,41 @@ const otherMiddleware = new ApolloLink((operation, forward) => {
   return forward(operation);
 })
 
+const errorLink = onError(({ graphQLErrors, networkError }) => {
+  if (graphQLErrors){
+    graphQLErrors.map(({ message, locations, path }) =>
+      console.log(
+        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
+      ),
+    );
+}
+  if (networkError) console.log(`[Network error]: ${networkError}`);
+});
+
 const client = new ApolloClient({
   link: from([
     authMiddleware,
     otherMiddleware,
-    httpLink
+    errorLink,
+    httpLink,
   ]),
-  cache: new InMemoryCache()
+  cache: new InMemoryCache(),
 });
 
 function App() {
   return (
     <ApolloProvider client={client}>
       <BrowserRouter>
-      <div>
-        <ul>
-         <li><Link to='/'>Home</Link></li>
-         <li><Link to='/login'>Login</Link></li>
-         <li><Link to='/signup'>SignUp</Link></li>
-         {/* <li><Link to='/write'>Write</Link></li>  example */}
-       </ul>
-        <Route exact path='/' component={Home} />
-        <Route path='/login' component={Login}/>
-        <Route path='/signup' component={SignUp} />
-        {/* <Route path='/write' component={Write} />  example */}
-      </div>
+      <Switch>
+        <Route exact path='/login' component={Login}/>
+        <Route exact path='/signup' component={SignUp} />
+        <Auth>
+          <Switch>
+            <Route exact path="/home" component={Home}/>
+            {/* <Route exact path="/page" component={Page}/> */}
+          </Switch>
+        </Auth>
+      </Switch>
     </BrowserRouter>
 
     </ApolloProvider>
