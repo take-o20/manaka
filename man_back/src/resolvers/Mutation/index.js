@@ -1,13 +1,9 @@
 import signup from './Signup/SignUp'
 import login from './Login/Login'
-// const Mutation = {
-//   createUser: (parent, args, { prisma }, info) => prisma.createUser(),
-//   deleteUser: (parent, args, {prisma }, info) => prisma.deleteUser(),
-// }
-
-// export default Mutation
+import addfriend from './AddFriend/AddFriend'
 
 module.exports = {
   signup,
   login,
+  addfriend,
 }

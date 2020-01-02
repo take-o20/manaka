@@ -24,7 +24,7 @@ const Login = () => {
     password.value = '';
   }
   if(!loading && data){
-    localStorage.setItem('token', data.login.token);
+    localStorage.setItem(process.env.REACT_APP_AUTH_TOKEN_NAME, data.login.token);
     // localStorage.removeItem('token') signOutの時
     history.push("/home");
   }

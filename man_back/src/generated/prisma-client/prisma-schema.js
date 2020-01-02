@@ -3,7 +3,11 @@ module.exports = {
   // Please don't change this file manually but run `prisma generate` to update it.
   // For more information, please read the docs: https://www.prisma.io/docs/prisma-client/
 
-/* GraphQL */ `type AggregateUser {
+/* GraphQL */ `type AggregateFriend {
+  count: Int!
+}
+
+type AggregateUser {
   count: Int!
 }
 
@@ -11,9 +15,272 @@ type BatchPayload {
   count: Long!
 }
 
+scalar DateTime
+
+type Friend {
+  id: ID!
+  name: String
+  defaultName: String!
+  friendId: String!
+  author: User!
+}
+
+type FriendConnection {
+  pageInfo: PageInfo!
+  edges: [FriendEdge]!
+  aggregate: AggregateFriend!
+}
+
+input FriendCreateInput {
+  name: String
+  defaultName: String!
+  friendId: String!
+  author: UserCreateOneWithoutFriendsInput!
+}
+
+input FriendCreateManyWithoutAuthorInput {
+  create: [FriendCreateWithoutAuthorInput!]
+  connect: [FriendWhereUniqueInput!]
+}
+
+input FriendCreateWithoutAuthorInput {
+  name: String
+  defaultName: String!
+  friendId: String!
+}
+
+type FriendEdge {
+  node: Friend!
+  cursor: String!
+}
+
+enum FriendOrderByInput {
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+  defaultName_ASC
+  defaultName_DESC
+  friendId_ASC
+  friendId_DESC
+}
+
+type FriendPreviousValues {
+  id: ID!
+  name: String
+  defaultName: String!
+  friendId: String!
+}
+
+input FriendScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  defaultName: String
+  defaultName_not: String
+  defaultName_in: [String!]
+  defaultName_not_in: [String!]
+  defaultName_lt: String
+  defaultName_lte: String
+  defaultName_gt: String
+  defaultName_gte: String
+  defaultName_contains: String
+  defaultName_not_contains: String
+  defaultName_starts_with: String
+  defaultName_not_starts_with: String
+  defaultName_ends_with: String
+  defaultName_not_ends_with: String
+  friendId: String
+  friendId_not: String
+  friendId_in: [String!]
+  friendId_not_in: [String!]
+  friendId_lt: String
+  friendId_lte: String
+  friendId_gt: String
+  friendId_gte: String
+  friendId_contains: String
+  friendId_not_contains: String
+  friendId_starts_with: String
+  friendId_not_starts_with: String
+  friendId_ends_with: String
+  friendId_not_ends_with: String
+  AND: [FriendScalarWhereInput!]
+  OR: [FriendScalarWhereInput!]
+  NOT: [FriendScalarWhereInput!]
+}
+
+type FriendSubscriptionPayload {
+  mutation: MutationType!
+  node: Friend
+  updatedFields: [String!]
+  previousValues: FriendPreviousValues
+}
+
+input FriendSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: FriendWhereInput
+  AND: [FriendSubscriptionWhereInput!]
+  OR: [FriendSubscriptionWhereInput!]
+  NOT: [FriendSubscriptionWhereInput!]
+}
+
+input FriendUpdateInput {
+  name: String
+  defaultName: String
+  friendId: String
+  author: UserUpdateOneRequiredWithoutFriendsInput
+}
+
+input FriendUpdateManyDataInput {
+  name: String
+  defaultName: String
+  friendId: String
+}
+
+input FriendUpdateManyMutationInput {
+  name: String
+  defaultName: String
+  friendId: String
+}
+
+input FriendUpdateManyWithoutAuthorInput {
+  create: [FriendCreateWithoutAuthorInput!]
+  delete: [FriendWhereUniqueInput!]
+  connect: [FriendWhereUniqueInput!]
+  set: [FriendWhereUniqueInput!]
+  disconnect: [FriendWhereUniqueInput!]
+  update: [FriendUpdateWithWhereUniqueWithoutAuthorInput!]
+  upsert: [FriendUpsertWithWhereUniqueWithoutAuthorInput!]
+  deleteMany: [FriendScalarWhereInput!]
+  updateMany: [FriendUpdateManyWithWhereNestedInput!]
+}
+
+input FriendUpdateManyWithWhereNestedInput {
+  where: FriendScalarWhereInput!
+  data: FriendUpdateManyDataInput!
+}
+
+input FriendUpdateWithoutAuthorDataInput {
+  name: String
+  defaultName: String
+  friendId: String
+}
+
+input FriendUpdateWithWhereUniqueWithoutAuthorInput {
+  where: FriendWhereUniqueInput!
+  data: FriendUpdateWithoutAuthorDataInput!
+}
+
+input FriendUpsertWithWhereUniqueWithoutAuthorInput {
+  where: FriendWhereUniqueInput!
+  update: FriendUpdateWithoutAuthorDataInput!
+  create: FriendCreateWithoutAuthorInput!
+}
+
+input FriendWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  defaultName: String
+  defaultName_not: String
+  defaultName_in: [String!]
+  defaultName_not_in: [String!]
+  defaultName_lt: String
+  defaultName_lte: String
+  defaultName_gt: String
+  defaultName_gte: String
+  defaultName_contains: String
+  defaultName_not_contains: String
+  defaultName_starts_with: String
+  defaultName_not_starts_with: String
+  defaultName_ends_with: String
+  defaultName_not_ends_with: String
+  friendId: String
+  friendId_not: String
+  friendId_in: [String!]
+  friendId_not_in: [String!]
+  friendId_lt: String
+  friendId_lte: String
+  friendId_gt: String
+  friendId_gte: String
+  friendId_contains: String
+  friendId_not_contains: String
+  friendId_starts_with: String
+  friendId_not_starts_with: String
+  friendId_ends_with: String
+  friendId_not_ends_with: String
+  author: UserWhereInput
+  AND: [FriendWhereInput!]
+  OR: [FriendWhereInput!]
+  NOT: [FriendWhereInput!]
+}
+
+input FriendWhereUniqueInput {
+  id: ID
+}
+
 scalar Long
 
 type Mutation {
+  createFriend(data: FriendCreateInput!): Friend!
+  updateFriend(data: FriendUpdateInput!, where: FriendWhereUniqueInput!): Friend
+  updateManyFriends(data: FriendUpdateManyMutationInput!, where: FriendWhereInput): BatchPayload!
+  upsertFriend(where: FriendWhereUniqueInput!, create: FriendCreateInput!, update: FriendUpdateInput!): Friend!
+  deleteFriend(where: FriendWhereUniqueInput!): Friend
+  deleteManyFriends(where: FriendWhereInput): BatchPayload!
   createUser(data: UserCreateInput!): User!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
@@ -40,6 +307,9 @@ type PageInfo {
 }
 
 type Query {
+  friend(where: FriendWhereUniqueInput!): Friend
+  friends(where: FriendWhereInput, orderBy: FriendOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Friend]!
+  friendsConnection(where: FriendWhereInput, orderBy: FriendOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): FriendConnection!
   user(where: UserWhereUniqueInput!): User
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
@@ -47,6 +317,7 @@ type Query {
 }
 
 type Subscription {
+  friend(where: FriendSubscriptionWhereInput): FriendSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
 }
 
@@ -55,6 +326,8 @@ type User {
   name: String!
   email: String!
   password: String!
+  birthday: DateTime
+  friends(where: FriendWhereInput, orderBy: FriendOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Friend!]
 }
 
 type UserConnection {
@@ -67,6 +340,20 @@ input UserCreateInput {
   name: String!
   email: String!
   password: String!
+  birthday: DateTime
+  friends: FriendCreateManyWithoutAuthorInput
+}
+
+input UserCreateOneWithoutFriendsInput {
+  create: UserCreateWithoutFriendsInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateWithoutFriendsInput {
+  name: String!
+  email: String!
+  password: String!
+  birthday: DateTime
 }
 
 type UserEdge {
@@ -83,6 +370,8 @@ enum UserOrderByInput {
   email_DESC
   password_ASC
   password_DESC
+  birthday_ASC
+  birthday_DESC
 }
 
 type UserPreviousValues {
@@ -90,6 +379,7 @@ type UserPreviousValues {
   name: String!
   email: String!
   password: String!
+  birthday: DateTime
 }
 
 type UserSubscriptionPayload {
@@ -114,12 +404,34 @@ input UserUpdateInput {
   name: String
   email: String
   password: String
+  birthday: DateTime
+  friends: FriendUpdateManyWithoutAuthorInput
 }
 
 input UserUpdateManyMutationInput {
   name: String
   email: String
   password: String
+  birthday: DateTime
+}
+
+input UserUpdateOneRequiredWithoutFriendsInput {
+  create: UserCreateWithoutFriendsInput
+  update: UserUpdateWithoutFriendsDataInput
+  upsert: UserUpsertWithoutFriendsInput
+  connect: UserWhereUniqueInput
+}
+
+input UserUpdateWithoutFriendsDataInput {
+  name: String
+  email: String
+  password: String
+  birthday: DateTime
+}
+
+input UserUpsertWithoutFriendsInput {
+  update: UserUpdateWithoutFriendsDataInput!
+  create: UserCreateWithoutFriendsInput!
 }
 
 input UserWhereInput {
@@ -179,6 +491,17 @@ input UserWhereInput {
   password_not_starts_with: String
   password_ends_with: String
   password_not_ends_with: String
+  birthday: DateTime
+  birthday_not: DateTime
+  birthday_in: [DateTime!]
+  birthday_not_in: [DateTime!]
+  birthday_lt: DateTime
+  birthday_lte: DateTime
+  birthday_gt: DateTime
+  birthday_gte: DateTime
+  friends_every: FriendWhereInput
+  friends_some: FriendWhereInput
+  friends_none: FriendWhereInput
   AND: [UserWhereInput!]
   OR: [UserWhereInput!]
   NOT: [UserWhereInput!]

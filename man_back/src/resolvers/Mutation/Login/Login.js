@@ -7,13 +7,12 @@ const login = async (parent, args, context, info) => {
   if (!user) {
     throw new Error('No such user found')
   }
-
   const valid = await bcrypt.compare(args.password, user.password)
   if (!valid) {
     throw new Error('Invalid password')
   }
 
-  const token = jwt.sign({ userId: user.id }, APP_SECRET)
+  const token = jwt.sign({ userId: user.id, userName: user.name }, APP_SECRET)
 
   return {
     token,

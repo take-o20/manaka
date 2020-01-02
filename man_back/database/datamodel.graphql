@@ -3,4 +3,14 @@ type User{
   name: String!
   email: String! @unique
   password: String!
+  birthday: DateTime
+  friends: [Friend!]! @relation(name: "FriendsByAuthor", onDelete: CASCADE)
+}
+
+type Friend{
+  id: ID! @unique
+  name: String
+  defaultName: String!
+  friendId: String!
+  author: User! @relation(name: "FriendsByAuthor")
 }

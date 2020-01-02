@@ -13,56 +13,34 @@ const GET_DATA = gql`
     }
   }
 `
-const CREATE_USER = gql`
-  mutation CreateUser($name: String!){
-    createUser(data:{name: $name}){
-      id
-      name
-    }
-  }
+const GET_USER = gql`
+ query getUser($id: String!){
+   user(id: $id){
+     name
+     email
+   }
+ }
 `
 
-export default function Home() {
-  // query
-  const { loading, error, data } = useQuery(GET_DATA);
+export default function Home(props) {
+  const userId = props.location.state.userId
+  const userName = props.location.state.userName
+  console.log(userId, userName)
+  const { loading, error, data} = useQuery(GET_USER,{variables:{id: userId} })
   if(!loading){
-    console.log("aaaaaaaaa",data)
+    console.log(data.user)
   }
-
-  //mutation
-  const [ createUser, {data2}] = useMutation(CREATE_USER);
-  let input;
   return (
     <div>
       <h1 className="home-top">Hello, This is GrapqQL Example</h1>
       <div>
-        <h2>This is Query Example.</h2>
+        <h2>Welcome to manaka</h2>
         {loading? <p>Loading ...</p>:
         <div>
-        <p style={{color:"blue"}}>name: {data.users[0].name}</p>
-        <p style={{color:"blue"}}>id: {data.users[0].id}</p>
+        <p style={{color:"blue"}}>name: {data.user.name}</p>
+        <p style={{color:"blue"}}>email: {data.user.email}</p>
         </div>
         }
-      </div>
-      <div>
-        <form
-          onSubmit={e => {
-          e.preventDefault();
-          createUser({ variables: {name: input.value} });
-          input.value = '';
-          }}
-        >
-          <td align="right"><b> name：</b></td>
-          <td>
-          <input
-            ref={node => {
-              input = node;
-            }}
-          />
-          </td>
-          <td><button type="submit">Add User</button></td>
-        </form>
-        <h2>Above is Mutation Example.</h2>
       </div>
     </div>
   )

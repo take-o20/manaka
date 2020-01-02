@@ -16,6 +16,9 @@ import  Home  from "./Home/Home"
 import Login from './Login/Login'
 import SignUp from './SignUp/SignUp'
 import Auth from './Auth/Auth'
+import Chat from './Chat/Chat'
+import Ex from './Ex/Ex'
+import Ex1 from './Ex1/Ex1'
 
 const httpLink = new HttpLink({ uri: process.env.REACT_APP_GRAPHQL_END});
 
@@ -23,7 +26,7 @@ const authMiddleware = new ApolloLink((operation, forward) => {
   operation.setContext(({ headers = {}}) => ({
     headers: {
       ...headers,
-      authorization: localStorage.getItem('token') || null,
+      authorization: localStorage.getItem(process.env.REACT_APP_AUTH_TOKEN_NAME) || null,
     }
   }));
   return forward(operation);
@@ -65,11 +68,16 @@ function App() {
     <ApolloProvider client={client}>
       <BrowserRouter>
       <Switch>
+        {/* <Route exact path='/ex' component={Ex} /> */}
+        <Route exact path='/ex1' component={Ex1}/>
+        <Route exact path='/chat' component={Chat} />
         <Route exact path='/login' component={Login}/>
         <Route exact path='/signup' component={SignUp} />
         <Auth>
           <Switch>
             <Route exact path="/home" component={Home}/>
+            <Route exact path='/ex' component={Ex} />
+
             {/* <Route exact path="/page" component={Page}/> */}
           </Switch>
         </Auth>

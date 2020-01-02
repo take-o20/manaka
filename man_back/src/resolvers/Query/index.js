@@ -1,9 +1,8 @@
-import a from "./a"
+import {users, user, friends, friend} from './UserInfo/UserInfo'
 
-const Query = {
-  users: (parent, args, { prisma }, info) => prisma.users(),
-  fuck:(parent, args, { prisma }, info) => a(args),
-  hello:(parent, args, { prisma }, info) => a(args),
+module.exports = {
+  users,
+  user,
+  friends,
+  friend,
 }
-
-export default Query

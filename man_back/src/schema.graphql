@@ -1,14 +1,13 @@
 type Query {
-  hello(name: String): String!
-  fuck(name: String):String!
   user(id: String!): User!
   users: [User]!
+  friend(id: ID!):Friend!
+  friends:[Friend]! 
 }
 type Mutation {
-  createUser(name: String!, email: String!): User!
-  deleteUser(id: String!): String!
   signup(email: String!, password: String!, name: String!): AuthPayload
   login(email: String!, password: String!): AuthPayload
+  addfriend(friendId: ID!,defaultName: String!,authorId: ID!): Friend!
 }
 type AuthPayload {
   token: String
@@ -18,4 +17,13 @@ type User {
   id: ID!
   name: String!
   email: String!
+  friends:[Friend!]!
+}
+
+type Friend{
+  id: ID!
+  name: String
+  defaultName: String!
+  friendId: String!
+  author: User!
 }
