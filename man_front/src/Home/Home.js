@@ -2,7 +2,6 @@ import React from 'react'
 import './Home.css'
 import gql from "graphql-tag";
 import { useQuery} from "@apollo/react-hooks";
-import { useMutation } from '@apollo/react-hooks';
 
 // this is grapqQL example
 const GET_DATA = gql`
@@ -23,9 +22,8 @@ const GET_USER = gql`
 `
 
 export default function Home(props) {
-  const userId = props.location.state.userId
-  const userName = props.location.state.userName
-  console.log(userId, userName)
+  const {userId, userName} = props.location.state
+
   const { loading, error, data} = useQuery(GET_USER,{variables:{id: userId} })
   if(!loading){
     console.log(data.user)

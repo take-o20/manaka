@@ -16,6 +16,7 @@ import  Home  from "./Home/Home"
 import Login from './Login/Login'
 import SignUp from './SignUp/SignUp'
 import Auth from './Auth/Auth'
+import FriendList from './FriendList/FriendList'
 import Chat from './Chat/Chat'
 import Ex from './Ex/Ex'
 import Ex1 from './Ex1/Ex1'
@@ -70,14 +71,14 @@ function App() {
       <Switch>
         {/* <Route exact path='/ex' component={Ex} /> */}
         <Route exact path='/ex1' component={Ex1}/>
-        <Route exact path='/chat' component={Chat} />
         <Route exact path='/login' component={Login}/>
         <Route exact path='/signup' component={SignUp} />
         <Auth>
           <Switch>
             <Route exact path="/home" component={Home}/>
+            <Route exact path="/friendlist" component={FriendList}/>
+            <Route exact path='/chat/:id' component={Chat} />
             <Route exact path='/ex' component={Ex} />
-
             {/* <Route exact path="/page" component={Page}/> */}
           </Switch>
         </Auth>

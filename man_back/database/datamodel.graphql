@@ -13,4 +13,17 @@ type Friend{
   defaultName: String!
   friendId: String!
   author: User! @relation(name: "FriendsByAuthor")
+  chatRoomId: String! 
+  permission: Boolean! @default(value: false)
+}
+
+enum Faculty {
+  FSE
+  CSE
+  ASE
+}
+enum Major {
+  COMPACT
+  WIDE
+  COVER
 }

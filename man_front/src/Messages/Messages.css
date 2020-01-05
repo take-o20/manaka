@@ -1,0 +1,12 @@
+.yourMessage{
+  position: relative;
+  margin-left: 35%;
+  margin-bottom: 20px;
+  color:blue;
+}
+.friendMessage{
+  position: relative;
+  margin-right: 35%;
+  margin-bottom: 20px;
+  color: red;
+}

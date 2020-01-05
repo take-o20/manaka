@@ -3,11 +3,13 @@ type Query {
   users: [User]!
   friend(id: ID!):Friend!
   friends:[Friend]! 
+  friendslist(authorId: String!):[Friend]!
 }
 type Mutation {
   signup(email: String!, password: String!, name: String!): AuthPayload
   login(email: String!, password: String!): AuthPayload
   addfriend(friendId: ID!,defaultName: String!,authorId: ID!): Friend!
+  friendupdate(id: ID!, permission: Boolean!):Friend!
 }
 type AuthPayload {
   token: String
@@ -26,4 +28,6 @@ type Friend{
   defaultName: String!
   friendId: String!
   author: User!
+  chatRoomId: String!
+  permission: Boolean!
 }

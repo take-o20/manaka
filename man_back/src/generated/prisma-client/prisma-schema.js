@@ -23,6 +23,8 @@ type Friend {
   defaultName: String!
   friendId: String!
   author: User!
+  chatRoomId: String!
+  permission: Boolean!
 }
 
 type FriendConnection {
@@ -36,6 +38,8 @@ input FriendCreateInput {
   defaultName: String!
   friendId: String!
   author: UserCreateOneWithoutFriendsInput!
+  chatRoomId: String!
+  permission: Boolean
 }
 
 input FriendCreateManyWithoutAuthorInput {
@@ -47,6 +51,8 @@ input FriendCreateWithoutAuthorInput {
   name: String
   defaultName: String!
   friendId: String!
+  chatRoomId: String!
+  permission: Boolean
 }
 
 type FriendEdge {
@@ -63,6 +69,10 @@ enum FriendOrderByInput {
   defaultName_DESC
   friendId_ASC
   friendId_DESC
+  chatRoomId_ASC
+  chatRoomId_DESC
+  permission_ASC
+  permission_DESC
 }
 
 type FriendPreviousValues {
@@ -70,6 +80,8 @@ type FriendPreviousValues {
   name: String
   defaultName: String!
   friendId: String!
+  chatRoomId: String!
+  permission: Boolean!
 }
 
 input FriendScalarWhereInput {
@@ -129,6 +141,22 @@ input FriendScalarWhereInput {
   friendId_not_starts_with: String
   friendId_ends_with: String
   friendId_not_ends_with: String
+  chatRoomId: String
+  chatRoomId_not: String
+  chatRoomId_in: [String!]
+  chatRoomId_not_in: [String!]
+  chatRoomId_lt: String
+  chatRoomId_lte: String
+  chatRoomId_gt: String
+  chatRoomId_gte: String
+  chatRoomId_contains: String
+  chatRoomId_not_contains: String
+  chatRoomId_starts_with: String
+  chatRoomId_not_starts_with: String
+  chatRoomId_ends_with: String
+  chatRoomId_not_ends_with: String
+  permission: Boolean
+  permission_not: Boolean
   AND: [FriendScalarWhereInput!]
   OR: [FriendScalarWhereInput!]
   NOT: [FriendScalarWhereInput!]
@@ -157,18 +185,24 @@ input FriendUpdateInput {
   defaultName: String
   friendId: String
   author: UserUpdateOneRequiredWithoutFriendsInput
+  chatRoomId: String
+  permission: Boolean
 }
 
 input FriendUpdateManyDataInput {
   name: String
   defaultName: String
   friendId: String
+  chatRoomId: String
+  permission: Boolean
 }
 
 input FriendUpdateManyMutationInput {
   name: String
   defaultName: String
   friendId: String
+  chatRoomId: String
+  permission: Boolean
 }
 
 input FriendUpdateManyWithoutAuthorInput {
@@ -192,6 +226,8 @@ input FriendUpdateWithoutAuthorDataInput {
   name: String
   defaultName: String
   friendId: String
+  chatRoomId: String
+  permission: Boolean
 }
 
 input FriendUpdateWithWhereUniqueWithoutAuthorInput {
@@ -263,6 +299,22 @@ input FriendWhereInput {
   friendId_ends_with: String
   friendId_not_ends_with: String
   author: UserWhereInput
+  chatRoomId: String
+  chatRoomId_not: String
+  chatRoomId_in: [String!]
+  chatRoomId_not_in: [String!]
+  chatRoomId_lt: String
+  chatRoomId_lte: String
+  chatRoomId_gt: String
+  chatRoomId_gte: String
+  chatRoomId_contains: String
+  chatRoomId_not_contains: String
+  chatRoomId_starts_with: String
+  chatRoomId_not_starts_with: String
+  chatRoomId_ends_with: String
+  chatRoomId_not_ends_with: String
+  permission: Boolean
+  permission_not: Boolean
   AND: [FriendWhereInput!]
   OR: [FriendWhereInput!]
   NOT: [FriendWhereInput!]

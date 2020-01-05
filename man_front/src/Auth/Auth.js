@@ -11,7 +11,4 @@ const Auth = (props) => {
   )
 }
 
-
-// (props.currentUser.isLoggedIn ? props.children : <Redirect to={'/login'}/>)
-
 export default Auth
