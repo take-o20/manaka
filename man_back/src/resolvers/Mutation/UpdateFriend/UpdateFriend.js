@@ -1,6 +1,7 @@
 
 const friendupdate = async (parent, args, context, info) => {
-  const {id, permission} = args
+  const { input } = args
+  const {id, permission} = input
   const friend = await context.prisma.updateFriend({
     data:{
       permission
@@ -9,7 +10,7 @@ const friendupdate = async (parent, args, context, info) => {
       id:id
     }
   })
-  return friend
+  return {friend}
 }
 
 export default friendupdate

@@ -1,20 +1,32 @@
-type User{
+type User {
   id: ID! @unique
-  name: String!
+  nickname: String
+  firstName: String!
+  lastName: String!
   email: String! @unique
   password: String!
   birthday: DateTime
-  friends: [Friend!]! @relation(name: "FriendsByAuthor", onDelete: CASCADE)
+  phoneNumber: String
+  friends: [Friend!]!
+  biography: String
+  profileFile: File
 }
 
 type Friend{
   id: ID! @unique
-  name: String
-  defaultName: String!
+  nickname: String
+  firstName: String!
+  lastName: String!
   friendId: String!
-  author: User! @relation(name: "FriendsByAuthor")
+  author: User!
   chatRoomId: String! 
   permission: Boolean! @default(value: false)
+}
+
+type File{
+  id: ID! @unique
+  encoding: String!
+  author: User! 
 }
 
 enum Faculty {

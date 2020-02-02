@@ -8,7 +8,8 @@ const friends = async(parent, args, {prisma}, info) => prisma.friends()
 const friend = async(parent, args, {prisma}, info) => prisma.friend({...args})
 
 const friendslist = async(parent, args, {prisma}, info) => {
-  const authorId = args.authorId
+  const {input} = args
+  const {authorId} = input
   const list = await prisma.friends({
     where:{
       author:{
@@ -19,4 +20,14 @@ const friendslist = async(parent, args, {prisma}, info) => {
   return list
 }
 
-export {users, user, friends, friend, friendslist}
+const profileFile = async(parent, args, {prisma}, info) => {
+  const { input } = args
+  const {authorId} = input
+  const result =  await prisma.file({
+    id: authorId
+  })
+  return result
+}
+
+
+export {users, user, friends, friend, friendslist, profileFile}

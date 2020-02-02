@@ -16,6 +16,7 @@ export type AtLeastOne<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> &
 export type Maybe<T> = T | undefined | null;
 
 export interface Exists {
+  file: (where?: FileWhereInput) => Promise<boolean>;
   friend: (where?: FriendWhereInput) => Promise<boolean>;
   user: (where?: UserWhereInput) => Promise<boolean>;
 }
@@ -39,6 +40,25 @@ export interface Prisma {
    * Queries
    */
 
+  file: (where: FileWhereUniqueInput) => FileNullablePromise;
+  files: (args?: {
+    where?: FileWhereInput;
+    orderBy?: FileOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => FragmentableArray<File>;
+  filesConnection: (args?: {
+    where?: FileWhereInput;
+    orderBy?: FileOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => FileConnectionPromise;
   friend: (where: FriendWhereUniqueInput) => FriendNullablePromise;
   friends: (args?: {
     where?: FriendWhereInput;
@@ -83,6 +103,22 @@ export interface Prisma {
    * Mutations
    */
 
+  createFile: (data: FileCreateInput) => FilePromise;
+  updateFile: (args: {
+    data: FileUpdateInput;
+    where: FileWhereUniqueInput;
+  }) => FilePromise;
+  updateManyFiles: (args: {
+    data: FileUpdateManyMutationInput;
+    where?: FileWhereInput;
+  }) => BatchPayloadPromise;
+  upsertFile: (args: {
+    where: FileWhereUniqueInput;
+    create: FileCreateInput;
+    update: FileUpdateInput;
+  }) => FilePromise;
+  deleteFile: (where: FileWhereUniqueInput) => FilePromise;
+  deleteManyFiles: (where?: FileWhereInput) => BatchPayloadPromise;
   createFriend: (data: FriendCreateInput) => FriendPromise;
   updateFriend: (args: {
     data: FriendUpdateInput;
@@ -124,6 +160,9 @@ export interface Prisma {
 }
 
 export interface Subscription {
+  file: (
+    where?: FileSubscriptionWhereInput
+  ) => FileSubscriptionPayloadSubscription;
   friend: (
     where?: FriendSubscriptionWhereInput
   ) => FriendSubscriptionPayloadSubscription;
@@ -143,10 +182,12 @@ export interface ClientConstructor<T> {
 export type FriendOrderByInput =
   | "id_ASC"
   | "id_DESC"
-  | "name_ASC"
-  | "name_DESC"
-  | "defaultName_ASC"
-  | "defaultName_DESC"
+  | "nickname_ASC"
+  | "nickname_DESC"
+  | "firstName_ASC"
+  | "firstName_DESC"
+  | "lastName_ASC"
+  | "lastName_DESC"
   | "friendId_ASC"
   | "friendId_DESC"
   | "chatRoomId_ASC"
@@ -154,30 +195,33 @@ export type FriendOrderByInput =
   | "permission_ASC"
   | "permission_DESC";
 
+export type FileOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "encoding_ASC"
+  | "encoding_DESC";
+
 export type UserOrderByInput =
   | "id_ASC"
   | "id_DESC"
-  | "name_ASC"
-  | "name_DESC"
+  | "nickname_ASC"
+  | "nickname_DESC"
+  | "firstName_ASC"
+  | "firstName_DESC"
+  | "lastName_ASC"
+  | "lastName_DESC"
   | "email_ASC"
   | "email_DESC"
   | "password_ASC"
   | "password_DESC"
   | "birthday_ASC"
-  | "birthday_DESC";
+  | "birthday_DESC"
+  | "phoneNumber_ASC"
+  | "phoneNumber_DESC"
+  | "biography_ASC"
+  | "biography_DESC";
 
 export type MutationType = "CREATED" | "UPDATED" | "DELETED";
-
-export interface UserUpdateOneRequiredWithoutFriendsInput {
-  create?: Maybe<UserCreateWithoutFriendsInput>;
-  update?: Maybe<UserUpdateWithoutFriendsDataInput>;
-  upsert?: Maybe<UserUpsertWithoutFriendsInput>;
-  connect?: Maybe<UserWhereUniqueInput>;
-}
-
-export type FriendWhereUniqueInput = AtLeastOne<{
-  id: Maybe<ID_Input>;
-}>;
 
 export interface FriendUpdateManyWithoutAuthorInput {
   create?: Maybe<
@@ -202,196 +246,14 @@ export interface FriendUpdateManyWithoutAuthorInput {
   >;
 }
 
-export interface UserCreateInput {
-  name: String;
-  email: String;
-  password: String;
-  birthday?: Maybe<DateTimeInput>;
-  friends?: Maybe<FriendCreateManyWithoutAuthorInput>;
-}
-
-export interface UserUpdateInput {
-  name?: Maybe<String>;
-  email?: Maybe<String>;
-  password?: Maybe<String>;
-  birthday?: Maybe<DateTimeInput>;
-  friends?: Maybe<FriendUpdateManyWithoutAuthorInput>;
-}
-
-export interface UserUpsertWithoutFriendsInput {
-  update: UserUpdateWithoutFriendsDataInput;
-  create: UserCreateWithoutFriendsInput;
-}
-
-export interface UserSubscriptionWhereInput {
-  mutation_in?: Maybe<MutationType[] | MutationType>;
-  updatedFields_contains?: Maybe<String>;
-  updatedFields_contains_every?: Maybe<String[] | String>;
-  updatedFields_contains_some?: Maybe<String[] | String>;
-  node?: Maybe<UserWhereInput>;
-  AND?: Maybe<UserSubscriptionWhereInput[] | UserSubscriptionWhereInput>;
-  OR?: Maybe<UserSubscriptionWhereInput[] | UserSubscriptionWhereInput>;
-  NOT?: Maybe<UserSubscriptionWhereInput[] | UserSubscriptionWhereInput>;
-}
-
-export interface UserUpdateManyMutationInput {
-  name?: Maybe<String>;
-  email?: Maybe<String>;
-  password?: Maybe<String>;
-  birthday?: Maybe<DateTimeInput>;
-}
-
-export interface FriendCreateInput {
-  name?: Maybe<String>;
-  defaultName: String;
-  friendId: String;
-  author: UserCreateOneWithoutFriendsInput;
-  chatRoomId: String;
-  permission?: Maybe<Boolean>;
-}
-
-export interface FriendUpdateManyWithWhereNestedInput {
-  where: FriendScalarWhereInput;
-  data: FriendUpdateManyDataInput;
-}
-
-export interface UserCreateOneWithoutFriendsInput {
-  create?: Maybe<UserCreateWithoutFriendsInput>;
-  connect?: Maybe<UserWhereUniqueInput>;
-}
+export type FileWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+}>;
 
 export interface FriendUpsertWithWhereUniqueWithoutAuthorInput {
   where: FriendWhereUniqueInput;
   update: FriendUpdateWithoutAuthorDataInput;
   create: FriendCreateWithoutAuthorInput;
-}
-
-export interface UserCreateWithoutFriendsInput {
-  name: String;
-  email: String;
-  password: String;
-  birthday?: Maybe<DateTimeInput>;
-}
-
-export interface FriendUpdateWithoutAuthorDataInput {
-  name?: Maybe<String>;
-  defaultName?: Maybe<String>;
-  friendId?: Maybe<String>;
-  chatRoomId?: Maybe<String>;
-  permission?: Maybe<Boolean>;
-}
-
-export interface FriendUpdateInput {
-  name?: Maybe<String>;
-  defaultName?: Maybe<String>;
-  friendId?: Maybe<String>;
-  author?: Maybe<UserUpdateOneRequiredWithoutFriendsInput>;
-  chatRoomId?: Maybe<String>;
-  permission?: Maybe<Boolean>;
-}
-
-export interface UserWhereInput {
-  id?: Maybe<ID_Input>;
-  id_not?: Maybe<ID_Input>;
-  id_in?: Maybe<ID_Input[] | ID_Input>;
-  id_not_in?: Maybe<ID_Input[] | ID_Input>;
-  id_lt?: Maybe<ID_Input>;
-  id_lte?: Maybe<ID_Input>;
-  id_gt?: Maybe<ID_Input>;
-  id_gte?: Maybe<ID_Input>;
-  id_contains?: Maybe<ID_Input>;
-  id_not_contains?: Maybe<ID_Input>;
-  id_starts_with?: Maybe<ID_Input>;
-  id_not_starts_with?: Maybe<ID_Input>;
-  id_ends_with?: Maybe<ID_Input>;
-  id_not_ends_with?: Maybe<ID_Input>;
-  name?: Maybe<String>;
-  name_not?: Maybe<String>;
-  name_in?: Maybe<String[] | String>;
-  name_not_in?: Maybe<String[] | String>;
-  name_lt?: Maybe<String>;
-  name_lte?: Maybe<String>;
-  name_gt?: Maybe<String>;
-  name_gte?: Maybe<String>;
-  name_contains?: Maybe<String>;
-  name_not_contains?: Maybe<String>;
-  name_starts_with?: Maybe<String>;
-  name_not_starts_with?: Maybe<String>;
-  name_ends_with?: Maybe<String>;
-  name_not_ends_with?: Maybe<String>;
-  email?: Maybe<String>;
-  email_not?: Maybe<String>;
-  email_in?: Maybe<String[] | String>;
-  email_not_in?: Maybe<String[] | String>;
-  email_lt?: Maybe<String>;
-  email_lte?: Maybe<String>;
-  email_gt?: Maybe<String>;
-  email_gte?: Maybe<String>;
-  email_contains?: Maybe<String>;
-  email_not_contains?: Maybe<String>;
-  email_starts_with?: Maybe<String>;
-  email_not_starts_with?: Maybe<String>;
-  email_ends_with?: Maybe<String>;
-  email_not_ends_with?: Maybe<String>;
-  password?: Maybe<String>;
-  password_not?: Maybe<String>;
-  password_in?: Maybe<String[] | String>;
-  password_not_in?: Maybe<String[] | String>;
-  password_lt?: Maybe<String>;
-  password_lte?: Maybe<String>;
-  password_gt?: Maybe<String>;
-  password_gte?: Maybe<String>;
-  password_contains?: Maybe<String>;
-  password_not_contains?: Maybe<String>;
-  password_starts_with?: Maybe<String>;
-  password_not_starts_with?: Maybe<String>;
-  password_ends_with?: Maybe<String>;
-  password_not_ends_with?: Maybe<String>;
-  birthday?: Maybe<DateTimeInput>;
-  birthday_not?: Maybe<DateTimeInput>;
-  birthday_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  birthday_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  birthday_lt?: Maybe<DateTimeInput>;
-  birthday_lte?: Maybe<DateTimeInput>;
-  birthday_gt?: Maybe<DateTimeInput>;
-  birthday_gte?: Maybe<DateTimeInput>;
-  friends_every?: Maybe<FriendWhereInput>;
-  friends_some?: Maybe<FriendWhereInput>;
-  friends_none?: Maybe<FriendWhereInput>;
-  AND?: Maybe<UserWhereInput[] | UserWhereInput>;
-  OR?: Maybe<UserWhereInput[] | UserWhereInput>;
-  NOT?: Maybe<UserWhereInput[] | UserWhereInput>;
-}
-
-export interface FriendCreateWithoutAuthorInput {
-  name?: Maybe<String>;
-  defaultName: String;
-  friendId: String;
-  chatRoomId: String;
-  permission?: Maybe<Boolean>;
-}
-
-export interface FriendUpdateManyDataInput {
-  name?: Maybe<String>;
-  defaultName?: Maybe<String>;
-  friendId?: Maybe<String>;
-  chatRoomId?: Maybe<String>;
-  permission?: Maybe<Boolean>;
-}
-
-export interface FriendCreateManyWithoutAuthorInput {
-  create?: Maybe<
-    FriendCreateWithoutAuthorInput[] | FriendCreateWithoutAuthorInput
-  >;
-  connect?: Maybe<FriendWhereUniqueInput[] | FriendWhereUniqueInput>;
-}
-
-export interface FriendUpdateManyMutationInput {
-  name?: Maybe<String>;
-  defaultName?: Maybe<String>;
-  friendId?: Maybe<String>;
-  chatRoomId?: Maybe<String>;
-  permission?: Maybe<Boolean>;
 }
 
 export interface FriendWhereInput {
@@ -409,34 +271,48 @@ export interface FriendWhereInput {
   id_not_starts_with?: Maybe<ID_Input>;
   id_ends_with?: Maybe<ID_Input>;
   id_not_ends_with?: Maybe<ID_Input>;
-  name?: Maybe<String>;
-  name_not?: Maybe<String>;
-  name_in?: Maybe<String[] | String>;
-  name_not_in?: Maybe<String[] | String>;
-  name_lt?: Maybe<String>;
-  name_lte?: Maybe<String>;
-  name_gt?: Maybe<String>;
-  name_gte?: Maybe<String>;
-  name_contains?: Maybe<String>;
-  name_not_contains?: Maybe<String>;
-  name_starts_with?: Maybe<String>;
-  name_not_starts_with?: Maybe<String>;
-  name_ends_with?: Maybe<String>;
-  name_not_ends_with?: Maybe<String>;
-  defaultName?: Maybe<String>;
-  defaultName_not?: Maybe<String>;
-  defaultName_in?: Maybe<String[] | String>;
-  defaultName_not_in?: Maybe<String[] | String>;
-  defaultName_lt?: Maybe<String>;
-  defaultName_lte?: Maybe<String>;
-  defaultName_gt?: Maybe<String>;
-  defaultName_gte?: Maybe<String>;
-  defaultName_contains?: Maybe<String>;
-  defaultName_not_contains?: Maybe<String>;
-  defaultName_starts_with?: Maybe<String>;
-  defaultName_not_starts_with?: Maybe<String>;
-  defaultName_ends_with?: Maybe<String>;
-  defaultName_not_ends_with?: Maybe<String>;
+  nickname?: Maybe<String>;
+  nickname_not?: Maybe<String>;
+  nickname_in?: Maybe<String[] | String>;
+  nickname_not_in?: Maybe<String[] | String>;
+  nickname_lt?: Maybe<String>;
+  nickname_lte?: Maybe<String>;
+  nickname_gt?: Maybe<String>;
+  nickname_gte?: Maybe<String>;
+  nickname_contains?: Maybe<String>;
+  nickname_not_contains?: Maybe<String>;
+  nickname_starts_with?: Maybe<String>;
+  nickname_not_starts_with?: Maybe<String>;
+  nickname_ends_with?: Maybe<String>;
+  nickname_not_ends_with?: Maybe<String>;
+  firstName?: Maybe<String>;
+  firstName_not?: Maybe<String>;
+  firstName_in?: Maybe<String[] | String>;
+  firstName_not_in?: Maybe<String[] | String>;
+  firstName_lt?: Maybe<String>;
+  firstName_lte?: Maybe<String>;
+  firstName_gt?: Maybe<String>;
+  firstName_gte?: Maybe<String>;
+  firstName_contains?: Maybe<String>;
+  firstName_not_contains?: Maybe<String>;
+  firstName_starts_with?: Maybe<String>;
+  firstName_not_starts_with?: Maybe<String>;
+  firstName_ends_with?: Maybe<String>;
+  firstName_not_ends_with?: Maybe<String>;
+  lastName?: Maybe<String>;
+  lastName_not?: Maybe<String>;
+  lastName_in?: Maybe<String[] | String>;
+  lastName_not_in?: Maybe<String[] | String>;
+  lastName_lt?: Maybe<String>;
+  lastName_lte?: Maybe<String>;
+  lastName_gt?: Maybe<String>;
+  lastName_gte?: Maybe<String>;
+  lastName_contains?: Maybe<String>;
+  lastName_not_contains?: Maybe<String>;
+  lastName_starts_with?: Maybe<String>;
+  lastName_not_starts_with?: Maybe<String>;
+  lastName_ends_with?: Maybe<String>;
+  lastName_not_ends_with?: Maybe<String>;
   friendId?: Maybe<String>;
   friendId_not?: Maybe<String>;
   friendId_in?: Maybe<String[] | String>;
@@ -473,13 +349,6 @@ export interface FriendWhereInput {
   NOT?: Maybe<FriendWhereInput[] | FriendWhereInput>;
 }
 
-export interface UserUpdateWithoutFriendsDataInput {
-  name?: Maybe<String>;
-  email?: Maybe<String>;
-  password?: Maybe<String>;
-  birthday?: Maybe<DateTimeInput>;
-}
-
 export interface FriendScalarWhereInput {
   id?: Maybe<ID_Input>;
   id_not?: Maybe<ID_Input>;
@@ -495,34 +364,48 @@ export interface FriendScalarWhereInput {
   id_not_starts_with?: Maybe<ID_Input>;
   id_ends_with?: Maybe<ID_Input>;
   id_not_ends_with?: Maybe<ID_Input>;
-  name?: Maybe<String>;
-  name_not?: Maybe<String>;
-  name_in?: Maybe<String[] | String>;
-  name_not_in?: Maybe<String[] | String>;
-  name_lt?: Maybe<String>;
-  name_lte?: Maybe<String>;
-  name_gt?: Maybe<String>;
-  name_gte?: Maybe<String>;
-  name_contains?: Maybe<String>;
-  name_not_contains?: Maybe<String>;
-  name_starts_with?: Maybe<String>;
-  name_not_starts_with?: Maybe<String>;
-  name_ends_with?: Maybe<String>;
-  name_not_ends_with?: Maybe<String>;
-  defaultName?: Maybe<String>;
-  defaultName_not?: Maybe<String>;
-  defaultName_in?: Maybe<String[] | String>;
-  defaultName_not_in?: Maybe<String[] | String>;
-  defaultName_lt?: Maybe<String>;
-  defaultName_lte?: Maybe<String>;
-  defaultName_gt?: Maybe<String>;
-  defaultName_gte?: Maybe<String>;
-  defaultName_contains?: Maybe<String>;
-  defaultName_not_contains?: Maybe<String>;
-  defaultName_starts_with?: Maybe<String>;
-  defaultName_not_starts_with?: Maybe<String>;
-  defaultName_ends_with?: Maybe<String>;
-  defaultName_not_ends_with?: Maybe<String>;
+  nickname?: Maybe<String>;
+  nickname_not?: Maybe<String>;
+  nickname_in?: Maybe<String[] | String>;
+  nickname_not_in?: Maybe<String[] | String>;
+  nickname_lt?: Maybe<String>;
+  nickname_lte?: Maybe<String>;
+  nickname_gt?: Maybe<String>;
+  nickname_gte?: Maybe<String>;
+  nickname_contains?: Maybe<String>;
+  nickname_not_contains?: Maybe<String>;
+  nickname_starts_with?: Maybe<String>;
+  nickname_not_starts_with?: Maybe<String>;
+  nickname_ends_with?: Maybe<String>;
+  nickname_not_ends_with?: Maybe<String>;
+  firstName?: Maybe<String>;
+  firstName_not?: Maybe<String>;
+  firstName_in?: Maybe<String[] | String>;
+  firstName_not_in?: Maybe<String[] | String>;
+  firstName_lt?: Maybe<String>;
+  firstName_lte?: Maybe<String>;
+  firstName_gt?: Maybe<String>;
+  firstName_gte?: Maybe<String>;
+  firstName_contains?: Maybe<String>;
+  firstName_not_contains?: Maybe<String>;
+  firstName_starts_with?: Maybe<String>;
+  firstName_not_starts_with?: Maybe<String>;
+  firstName_ends_with?: Maybe<String>;
+  firstName_not_ends_with?: Maybe<String>;
+  lastName?: Maybe<String>;
+  lastName_not?: Maybe<String>;
+  lastName_in?: Maybe<String[] | String>;
+  lastName_not_in?: Maybe<String[] | String>;
+  lastName_lt?: Maybe<String>;
+  lastName_lte?: Maybe<String>;
+  lastName_gt?: Maybe<String>;
+  lastName_gte?: Maybe<String>;
+  lastName_contains?: Maybe<String>;
+  lastName_not_contains?: Maybe<String>;
+  lastName_starts_with?: Maybe<String>;
+  lastName_not_starts_with?: Maybe<String>;
+  lastName_ends_with?: Maybe<String>;
+  lastName_not_ends_with?: Maybe<String>;
   friendId?: Maybe<String>;
   friendId_not?: Maybe<String>;
   friendId_in?: Maybe<String[] | String>;
@@ -558,6 +441,80 @@ export interface FriendScalarWhereInput {
   NOT?: Maybe<FriendScalarWhereInput[] | FriendScalarWhereInput>;
 }
 
+export interface FileWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  encoding?: Maybe<String>;
+  encoding_not?: Maybe<String>;
+  encoding_in?: Maybe<String[] | String>;
+  encoding_not_in?: Maybe<String[] | String>;
+  encoding_lt?: Maybe<String>;
+  encoding_lte?: Maybe<String>;
+  encoding_gt?: Maybe<String>;
+  encoding_gte?: Maybe<String>;
+  encoding_contains?: Maybe<String>;
+  encoding_not_contains?: Maybe<String>;
+  encoding_starts_with?: Maybe<String>;
+  encoding_not_starts_with?: Maybe<String>;
+  encoding_ends_with?: Maybe<String>;
+  encoding_not_ends_with?: Maybe<String>;
+  author?: Maybe<UserWhereInput>;
+  AND?: Maybe<FileWhereInput[] | FileWhereInput>;
+  OR?: Maybe<FileWhereInput[] | FileWhereInput>;
+  NOT?: Maybe<FileWhereInput[] | FileWhereInput>;
+}
+
+export interface UserCreateOneWithoutProfileFileInput {
+  create?: Maybe<UserCreateWithoutProfileFileInput>;
+  connect?: Maybe<UserWhereUniqueInput>;
+}
+
+export interface FriendCreateInput {
+  nickname?: Maybe<String>;
+  firstName: String;
+  lastName: String;
+  friendId: String;
+  author: UserCreateOneWithoutFriendsInput;
+  chatRoomId: String;
+  permission?: Maybe<Boolean>;
+}
+
+export interface UserCreateWithoutProfileFileInput {
+  nickname?: Maybe<String>;
+  firstName: String;
+  lastName: String;
+  email: String;
+  password: String;
+  birthday?: Maybe<DateTimeInput>;
+  phoneNumber?: Maybe<String>;
+  friends?: Maybe<FriendCreateManyWithoutAuthorInput>;
+  biography?: Maybe<String>;
+}
+
+export interface FriendUpdateManyWithWhereNestedInput {
+  where: FriendScalarWhereInput;
+  data: FriendUpdateManyDataInput;
+}
+
+export interface FriendCreateManyWithoutAuthorInput {
+  create?: Maybe<
+    FriendCreateWithoutAuthorInput[] | FriendCreateWithoutAuthorInput
+  >;
+  connect?: Maybe<FriendWhereUniqueInput[] | FriendWhereUniqueInput>;
+}
+
 export interface FriendSubscriptionWhereInput {
   mutation_in?: Maybe<MutationType[] | MutationType>;
   updatedFields_contains?: Maybe<String>;
@@ -569,14 +526,359 @@ export interface FriendSubscriptionWhereInput {
   NOT?: Maybe<FriendSubscriptionWhereInput[] | FriendSubscriptionWhereInput>;
 }
 
+export interface FriendCreateWithoutAuthorInput {
+  nickname?: Maybe<String>;
+  firstName: String;
+  lastName: String;
+  friendId: String;
+  chatRoomId: String;
+  permission?: Maybe<Boolean>;
+}
+
+export interface UserUpdateManyMutationInput {
+  nickname?: Maybe<String>;
+  firstName?: Maybe<String>;
+  lastName?: Maybe<String>;
+  email?: Maybe<String>;
+  password?: Maybe<String>;
+  birthday?: Maybe<DateTimeInput>;
+  phoneNumber?: Maybe<String>;
+  biography?: Maybe<String>;
+}
+
+export interface FileUpdateInput {
+  encoding?: Maybe<String>;
+  author?: Maybe<UserUpdateOneRequiredWithoutProfileFileInput>;
+}
+
+export interface UserCreateInput {
+  nickname?: Maybe<String>;
+  firstName: String;
+  lastName: String;
+  email: String;
+  password: String;
+  birthday?: Maybe<DateTimeInput>;
+  phoneNumber?: Maybe<String>;
+  friends?: Maybe<FriendCreateManyWithoutAuthorInput>;
+  biography?: Maybe<String>;
+  profileFile?: Maybe<FileCreateOneWithoutAuthorInput>;
+}
+
+export interface UserUpdateOneRequiredWithoutProfileFileInput {
+  create?: Maybe<UserCreateWithoutProfileFileInput>;
+  update?: Maybe<UserUpdateWithoutProfileFileDataInput>;
+  upsert?: Maybe<UserUpsertWithoutProfileFileInput>;
+  connect?: Maybe<UserWhereUniqueInput>;
+}
+
+export interface FriendUpdateManyMutationInput {
+  nickname?: Maybe<String>;
+  firstName?: Maybe<String>;
+  lastName?: Maybe<String>;
+  friendId?: Maybe<String>;
+  chatRoomId?: Maybe<String>;
+  permission?: Maybe<Boolean>;
+}
+
+export interface UserUpdateWithoutProfileFileDataInput {
+  nickname?: Maybe<String>;
+  firstName?: Maybe<String>;
+  lastName?: Maybe<String>;
+  email?: Maybe<String>;
+  password?: Maybe<String>;
+  birthday?: Maybe<DateTimeInput>;
+  phoneNumber?: Maybe<String>;
+  friends?: Maybe<FriendUpdateManyWithoutAuthorInput>;
+  biography?: Maybe<String>;
+}
+
+export interface FileUpsertWithoutAuthorInput {
+  update: FileUpdateWithoutAuthorDataInput;
+  create: FileCreateWithoutAuthorInput;
+}
+
+export interface FriendUpdateInput {
+  nickname?: Maybe<String>;
+  firstName?: Maybe<String>;
+  lastName?: Maybe<String>;
+  friendId?: Maybe<String>;
+  author?: Maybe<UserUpdateOneRequiredWithoutFriendsInput>;
+  chatRoomId?: Maybe<String>;
+  permission?: Maybe<Boolean>;
+}
+
+export interface FileUpdateWithoutAuthorDataInput {
+  encoding?: Maybe<String>;
+}
+
 export interface FriendUpdateWithWhereUniqueWithoutAuthorInput {
   where: FriendWhereUniqueInput;
   data: FriendUpdateWithoutAuthorDataInput;
 }
 
+export interface UserUpdateWithoutFriendsDataInput {
+  nickname?: Maybe<String>;
+  firstName?: Maybe<String>;
+  lastName?: Maybe<String>;
+  email?: Maybe<String>;
+  password?: Maybe<String>;
+  birthday?: Maybe<DateTimeInput>;
+  phoneNumber?: Maybe<String>;
+  biography?: Maybe<String>;
+  profileFile?: Maybe<FileUpdateOneWithoutAuthorInput>;
+}
+
+export interface FriendUpdateWithoutAuthorDataInput {
+  nickname?: Maybe<String>;
+  firstName?: Maybe<String>;
+  lastName?: Maybe<String>;
+  friendId?: Maybe<String>;
+  chatRoomId?: Maybe<String>;
+  permission?: Maybe<Boolean>;
+}
+
+export interface UserSubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<UserWhereInput>;
+  AND?: Maybe<UserSubscriptionWhereInput[] | UserSubscriptionWhereInput>;
+  OR?: Maybe<UserSubscriptionWhereInput[] | UserSubscriptionWhereInput>;
+  NOT?: Maybe<UserSubscriptionWhereInput[] | UserSubscriptionWhereInput>;
+}
+
+export interface UserWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  nickname?: Maybe<String>;
+  nickname_not?: Maybe<String>;
+  nickname_in?: Maybe<String[] | String>;
+  nickname_not_in?: Maybe<String[] | String>;
+  nickname_lt?: Maybe<String>;
+  nickname_lte?: Maybe<String>;
+  nickname_gt?: Maybe<String>;
+  nickname_gte?: Maybe<String>;
+  nickname_contains?: Maybe<String>;
+  nickname_not_contains?: Maybe<String>;
+  nickname_starts_with?: Maybe<String>;
+  nickname_not_starts_with?: Maybe<String>;
+  nickname_ends_with?: Maybe<String>;
+  nickname_not_ends_with?: Maybe<String>;
+  firstName?: Maybe<String>;
+  firstName_not?: Maybe<String>;
+  firstName_in?: Maybe<String[] | String>;
+  firstName_not_in?: Maybe<String[] | String>;
+  firstName_lt?: Maybe<String>;
+  firstName_lte?: Maybe<String>;
+  firstName_gt?: Maybe<String>;
+  firstName_gte?: Maybe<String>;
+  firstName_contains?: Maybe<String>;
+  firstName_not_contains?: Maybe<String>;
+  firstName_starts_with?: Maybe<String>;
+  firstName_not_starts_with?: Maybe<String>;
+  firstName_ends_with?: Maybe<String>;
+  firstName_not_ends_with?: Maybe<String>;
+  lastName?: Maybe<String>;
+  lastName_not?: Maybe<String>;
+  lastName_in?: Maybe<String[] | String>;
+  lastName_not_in?: Maybe<String[] | String>;
+  lastName_lt?: Maybe<String>;
+  lastName_lte?: Maybe<String>;
+  lastName_gt?: Maybe<String>;
+  lastName_gte?: Maybe<String>;
+  lastName_contains?: Maybe<String>;
+  lastName_not_contains?: Maybe<String>;
+  lastName_starts_with?: Maybe<String>;
+  lastName_not_starts_with?: Maybe<String>;
+  lastName_ends_with?: Maybe<String>;
+  lastName_not_ends_with?: Maybe<String>;
+  email?: Maybe<String>;
+  email_not?: Maybe<String>;
+  email_in?: Maybe<String[] | String>;
+  email_not_in?: Maybe<String[] | String>;
+  email_lt?: Maybe<String>;
+  email_lte?: Maybe<String>;
+  email_gt?: Maybe<String>;
+  email_gte?: Maybe<String>;
+  email_contains?: Maybe<String>;
+  email_not_contains?: Maybe<String>;
+  email_starts_with?: Maybe<String>;
+  email_not_starts_with?: Maybe<String>;
+  email_ends_with?: Maybe<String>;
+  email_not_ends_with?: Maybe<String>;
+  password?: Maybe<String>;
+  password_not?: Maybe<String>;
+  password_in?: Maybe<String[] | String>;
+  password_not_in?: Maybe<String[] | String>;
+  password_lt?: Maybe<String>;
+  password_lte?: Maybe<String>;
+  password_gt?: Maybe<String>;
+  password_gte?: Maybe<String>;
+  password_contains?: Maybe<String>;
+  password_not_contains?: Maybe<String>;
+  password_starts_with?: Maybe<String>;
+  password_not_starts_with?: Maybe<String>;
+  password_ends_with?: Maybe<String>;
+  password_not_ends_with?: Maybe<String>;
+  birthday?: Maybe<DateTimeInput>;
+  birthday_not?: Maybe<DateTimeInput>;
+  birthday_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  birthday_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  birthday_lt?: Maybe<DateTimeInput>;
+  birthday_lte?: Maybe<DateTimeInput>;
+  birthday_gt?: Maybe<DateTimeInput>;
+  birthday_gte?: Maybe<DateTimeInput>;
+  phoneNumber?: Maybe<String>;
+  phoneNumber_not?: Maybe<String>;
+  phoneNumber_in?: Maybe<String[] | String>;
+  phoneNumber_not_in?: Maybe<String[] | String>;
+  phoneNumber_lt?: Maybe<String>;
+  phoneNumber_lte?: Maybe<String>;
+  phoneNumber_gt?: Maybe<String>;
+  phoneNumber_gte?: Maybe<String>;
+  phoneNumber_contains?: Maybe<String>;
+  phoneNumber_not_contains?: Maybe<String>;
+  phoneNumber_starts_with?: Maybe<String>;
+  phoneNumber_not_starts_with?: Maybe<String>;
+  phoneNumber_ends_with?: Maybe<String>;
+  phoneNumber_not_ends_with?: Maybe<String>;
+  friends_every?: Maybe<FriendWhereInput>;
+  friends_some?: Maybe<FriendWhereInput>;
+  friends_none?: Maybe<FriendWhereInput>;
+  biography?: Maybe<String>;
+  biography_not?: Maybe<String>;
+  biography_in?: Maybe<String[] | String>;
+  biography_not_in?: Maybe<String[] | String>;
+  biography_lt?: Maybe<String>;
+  biography_lte?: Maybe<String>;
+  biography_gt?: Maybe<String>;
+  biography_gte?: Maybe<String>;
+  biography_contains?: Maybe<String>;
+  biography_not_contains?: Maybe<String>;
+  biography_starts_with?: Maybe<String>;
+  biography_not_starts_with?: Maybe<String>;
+  biography_ends_with?: Maybe<String>;
+  biography_not_ends_with?: Maybe<String>;
+  profileFile?: Maybe<FileWhereInput>;
+  AND?: Maybe<UserWhereInput[] | UserWhereInput>;
+  OR?: Maybe<UserWhereInput[] | UserWhereInput>;
+  NOT?: Maybe<UserWhereInput[] | UserWhereInput>;
+}
+
+export interface UserUpdateInput {
+  nickname?: Maybe<String>;
+  firstName?: Maybe<String>;
+  lastName?: Maybe<String>;
+  email?: Maybe<String>;
+  password?: Maybe<String>;
+  birthday?: Maybe<DateTimeInput>;
+  phoneNumber?: Maybe<String>;
+  friends?: Maybe<FriendUpdateManyWithoutAuthorInput>;
+  biography?: Maybe<String>;
+  profileFile?: Maybe<FileUpdateOneWithoutAuthorInput>;
+}
+
+export interface FileCreateWithoutAuthorInput {
+  encoding: String;
+}
+
+export interface UserUpsertWithoutFriendsInput {
+  update: UserUpdateWithoutFriendsDataInput;
+  create: UserCreateWithoutFriendsInput;
+}
+
+export interface FileCreateOneWithoutAuthorInput {
+  create?: Maybe<FileCreateWithoutAuthorInput>;
+  connect?: Maybe<FileWhereUniqueInput>;
+}
+
+export interface FileUpdateOneWithoutAuthorInput {
+  create?: Maybe<FileCreateWithoutAuthorInput>;
+  update?: Maybe<FileUpdateWithoutAuthorDataInput>;
+  upsert?: Maybe<FileUpsertWithoutAuthorInput>;
+  delete?: Maybe<Boolean>;
+  disconnect?: Maybe<Boolean>;
+  connect?: Maybe<FileWhereUniqueInput>;
+}
+
+export interface FriendUpdateManyDataInput {
+  nickname?: Maybe<String>;
+  firstName?: Maybe<String>;
+  lastName?: Maybe<String>;
+  friendId?: Maybe<String>;
+  chatRoomId?: Maybe<String>;
+  permission?: Maybe<Boolean>;
+}
+
+export interface FileCreateInput {
+  encoding: String;
+  author: UserCreateOneWithoutProfileFileInput;
+}
+
+export interface UserCreateOneWithoutFriendsInput {
+  create?: Maybe<UserCreateWithoutFriendsInput>;
+  connect?: Maybe<UserWhereUniqueInput>;
+}
+
+export interface UserCreateWithoutFriendsInput {
+  nickname?: Maybe<String>;
+  firstName: String;
+  lastName: String;
+  email: String;
+  password: String;
+  birthday?: Maybe<DateTimeInput>;
+  phoneNumber?: Maybe<String>;
+  biography?: Maybe<String>;
+  profileFile?: Maybe<FileCreateOneWithoutAuthorInput>;
+}
+
+export interface FileUpdateManyMutationInput {
+  encoding?: Maybe<String>;
+}
+
+export interface UserUpsertWithoutProfileFileInput {
+  update: UserUpdateWithoutProfileFileDataInput;
+  create: UserCreateWithoutProfileFileInput;
+}
+
+export interface FileSubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<FileWhereInput>;
+  AND?: Maybe<FileSubscriptionWhereInput[] | FileSubscriptionWhereInput>;
+  OR?: Maybe<FileSubscriptionWhereInput[] | FileSubscriptionWhereInput>;
+  NOT?: Maybe<FileSubscriptionWhereInput[] | FileSubscriptionWhereInput>;
+}
+
+export interface UserUpdateOneRequiredWithoutFriendsInput {
+  create?: Maybe<UserCreateWithoutFriendsInput>;
+  update?: Maybe<UserUpdateWithoutFriendsDataInput>;
+  upsert?: Maybe<UserUpsertWithoutFriendsInput>;
+  connect?: Maybe<UserWhereUniqueInput>;
+}
+
 export type UserWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;
   email?: Maybe<String>;
+}>;
+
+export type FriendWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
 }>;
 
 export interface NodeNode {
@@ -585,89 +887,42 @@ export interface NodeNode {
 
 export interface UserPreviousValues {
   id: ID_Output;
-  name: String;
+  nickname?: String;
+  firstName: String;
+  lastName: String;
   email: String;
   password: String;
   birthday?: DateTimeOutput;
+  phoneNumber?: String;
+  biography?: String;
 }
 
 export interface UserPreviousValuesPromise
   extends Promise<UserPreviousValues>,
     Fragmentable {
   id: () => Promise<ID_Output>;
-  name: () => Promise<String>;
+  nickname: () => Promise<String>;
+  firstName: () => Promise<String>;
+  lastName: () => Promise<String>;
   email: () => Promise<String>;
   password: () => Promise<String>;
   birthday: () => Promise<DateTimeOutput>;
+  phoneNumber: () => Promise<String>;
+  biography: () => Promise<String>;
 }
 
 export interface UserPreviousValuesSubscription
   extends Promise<AsyncIterator<UserPreviousValues>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
-  name: () => Promise<AsyncIterator<String>>;
+  nickname: () => Promise<AsyncIterator<String>>;
+  firstName: () => Promise<AsyncIterator<String>>;
+  lastName: () => Promise<AsyncIterator<String>>;
   email: () => Promise<AsyncIterator<String>>;
   password: () => Promise<AsyncIterator<String>>;
   birthday: () => Promise<AsyncIterator<DateTimeOutput>>;
-}
-
-export interface AggregateFriend {
-  count: Int;
-}
-
-export interface AggregateFriendPromise
-  extends Promise<AggregateFriend>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateFriendSubscription
-  extends Promise<AsyncIterator<AggregateFriend>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface Friend {
-  id: ID_Output;
-  name?: String;
-  defaultName: String;
-  friendId: String;
-  chatRoomId: String;
-  permission: Boolean;
-}
-
-export interface FriendPromise extends Promise<Friend>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  name: () => Promise<String>;
-  defaultName: () => Promise<String>;
-  friendId: () => Promise<String>;
-  author: <T = UserPromise>() => T;
-  chatRoomId: () => Promise<String>;
-  permission: () => Promise<Boolean>;
-}
-
-export interface FriendSubscription
-  extends Promise<AsyncIterator<Friend>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  name: () => Promise<AsyncIterator<String>>;
-  defaultName: () => Promise<AsyncIterator<String>>;
-  friendId: () => Promise<AsyncIterator<String>>;
-  author: <T = UserSubscription>() => T;
-  chatRoomId: () => Promise<AsyncIterator<String>>;
-  permission: () => Promise<AsyncIterator<Boolean>>;
-}
-
-export interface FriendNullablePromise
-  extends Promise<Friend | null>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  name: () => Promise<String>;
-  defaultName: () => Promise<String>;
-  friendId: () => Promise<String>;
-  author: <T = UserPromise>() => T;
-  chatRoomId: () => Promise<String>;
-  permission: () => Promise<Boolean>;
+  phoneNumber: () => Promise<AsyncIterator<String>>;
+  biography: () => Promise<AsyncIterator<String>>;
 }
 
 export interface FriendEdge {
@@ -685,6 +940,221 @@ export interface FriendEdgeSubscription
     Fragmentable {
   node: <T = FriendSubscription>() => T;
   cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface User {
+  id: ID_Output;
+  nickname?: String;
+  firstName: String;
+  lastName: String;
+  email: String;
+  password: String;
+  birthday?: DateTimeOutput;
+  phoneNumber?: String;
+  biography?: String;
+}
+
+export interface UserPromise extends Promise<User>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  nickname: () => Promise<String>;
+  firstName: () => Promise<String>;
+  lastName: () => Promise<String>;
+  email: () => Promise<String>;
+  password: () => Promise<String>;
+  birthday: () => Promise<DateTimeOutput>;
+  phoneNumber: () => Promise<String>;
+  friends: <T = FragmentableArray<Friend>>(args?: {
+    where?: FriendWhereInput;
+    orderBy?: FriendOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  biography: () => Promise<String>;
+  profileFile: <T = FilePromise>() => T;
+}
+
+export interface UserSubscription
+  extends Promise<AsyncIterator<User>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  nickname: () => Promise<AsyncIterator<String>>;
+  firstName: () => Promise<AsyncIterator<String>>;
+  lastName: () => Promise<AsyncIterator<String>>;
+  email: () => Promise<AsyncIterator<String>>;
+  password: () => Promise<AsyncIterator<String>>;
+  birthday: () => Promise<AsyncIterator<DateTimeOutput>>;
+  phoneNumber: () => Promise<AsyncIterator<String>>;
+  friends: <T = Promise<AsyncIterator<FriendSubscription>>>(args?: {
+    where?: FriendWhereInput;
+    orderBy?: FriendOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  biography: () => Promise<AsyncIterator<String>>;
+  profileFile: <T = FileSubscription>() => T;
+}
+
+export interface UserNullablePromise
+  extends Promise<User | null>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  nickname: () => Promise<String>;
+  firstName: () => Promise<String>;
+  lastName: () => Promise<String>;
+  email: () => Promise<String>;
+  password: () => Promise<String>;
+  birthday: () => Promise<DateTimeOutput>;
+  phoneNumber: () => Promise<String>;
+  friends: <T = FragmentableArray<Friend>>(args?: {
+    where?: FriendWhereInput;
+    orderBy?: FriendOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  biography: () => Promise<String>;
+  profileFile: <T = FilePromise>() => T;
+}
+
+export interface FriendConnection {
+  pageInfo: PageInfo;
+  edges: FriendEdge[];
+}
+
+export interface FriendConnectionPromise
+  extends Promise<FriendConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<FriendEdge>>() => T;
+  aggregate: <T = AggregateFriendPromise>() => T;
+}
+
+export interface FriendConnectionSubscription
+  extends Promise<AsyncIterator<FriendConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<FriendEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateFriendSubscription>() => T;
+}
+
+export interface AggregateFile {
+  count: Int;
+}
+
+export interface AggregateFilePromise
+  extends Promise<AggregateFile>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateFileSubscription
+  extends Promise<AsyncIterator<AggregateFile>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface BatchPayload {
+  count: Long;
+}
+
+export interface BatchPayloadPromise
+  extends Promise<BatchPayload>,
+    Fragmentable {
+  count: () => Promise<Long>;
+}
+
+export interface BatchPayloadSubscription
+  extends Promise<AsyncIterator<BatchPayload>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Long>>;
+}
+
+export interface Friend {
+  id: ID_Output;
+  nickname?: String;
+  firstName: String;
+  lastName: String;
+  friendId: String;
+  chatRoomId: String;
+  permission: Boolean;
+}
+
+export interface FriendPromise extends Promise<Friend>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  nickname: () => Promise<String>;
+  firstName: () => Promise<String>;
+  lastName: () => Promise<String>;
+  friendId: () => Promise<String>;
+  author: <T = UserPromise>() => T;
+  chatRoomId: () => Promise<String>;
+  permission: () => Promise<Boolean>;
+}
+
+export interface FriendSubscription
+  extends Promise<AsyncIterator<Friend>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  nickname: () => Promise<AsyncIterator<String>>;
+  firstName: () => Promise<AsyncIterator<String>>;
+  lastName: () => Promise<AsyncIterator<String>>;
+  friendId: () => Promise<AsyncIterator<String>>;
+  author: <T = UserSubscription>() => T;
+  chatRoomId: () => Promise<AsyncIterator<String>>;
+  permission: () => Promise<AsyncIterator<Boolean>>;
+}
+
+export interface FriendNullablePromise
+  extends Promise<Friend | null>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  nickname: () => Promise<String>;
+  firstName: () => Promise<String>;
+  lastName: () => Promise<String>;
+  friendId: () => Promise<String>;
+  author: <T = UserPromise>() => T;
+  chatRoomId: () => Promise<String>;
+  permission: () => Promise<Boolean>;
+}
+
+export interface FileEdge {
+  node: File;
+  cursor: String;
+}
+
+export interface FileEdgePromise extends Promise<FileEdge>, Fragmentable {
+  node: <T = FilePromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface FileEdgeSubscription
+  extends Promise<AsyncIterator<FileEdge>>,
+    Fragmentable {
+  node: <T = FileSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateUser {
+  count: Int;
+}
+
+export interface AggregateUserPromise
+  extends Promise<AggregateUser>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateUserSubscription
+  extends Promise<AsyncIterator<AggregateUser>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
 }
 
 export interface PageInfo {
@@ -710,162 +1180,133 @@ export interface PageInfoSubscription
   endCursor: () => Promise<AsyncIterator<String>>;
 }
 
-export interface AggregateUser {
+export interface UserConnection {
+  pageInfo: PageInfo;
+  edges: UserEdge[];
+}
+
+export interface UserConnectionPromise
+  extends Promise<UserConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<UserEdge>>() => T;
+  aggregate: <T = AggregateUserPromise>() => T;
+}
+
+export interface UserConnectionSubscription
+  extends Promise<AsyncIterator<UserConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<UserEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateUserSubscription>() => T;
+}
+
+export interface AggregateFriend {
   count: Int;
 }
 
-export interface AggregateUserPromise
-  extends Promise<AggregateUser>,
+export interface AggregateFriendPromise
+  extends Promise<AggregateFriend>,
     Fragmentable {
   count: () => Promise<Int>;
 }
 
-export interface AggregateUserSubscription
-  extends Promise<AsyncIterator<AggregateUser>>,
+export interface AggregateFriendSubscription
+  extends Promise<AsyncIterator<AggregateFriend>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
 }
 
-export interface User {
+export interface FilePreviousValues {
   id: ID_Output;
-  name: String;
-  email: String;
-  password: String;
-  birthday?: DateTimeOutput;
+  encoding: String;
 }
 
-export interface UserPromise extends Promise<User>, Fragmentable {
+export interface FilePreviousValuesPromise
+  extends Promise<FilePreviousValues>,
+    Fragmentable {
   id: () => Promise<ID_Output>;
-  name: () => Promise<String>;
-  email: () => Promise<String>;
-  password: () => Promise<String>;
-  birthday: () => Promise<DateTimeOutput>;
-  friends: <T = FragmentableArray<Friend>>(args?: {
-    where?: FriendWhereInput;
-    orderBy?: FriendOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
+  encoding: () => Promise<String>;
 }
 
-export interface UserSubscription
-  extends Promise<AsyncIterator<User>>,
+export interface FilePreviousValuesSubscription
+  extends Promise<AsyncIterator<FilePreviousValues>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
-  name: () => Promise<AsyncIterator<String>>;
-  email: () => Promise<AsyncIterator<String>>;
-  password: () => Promise<AsyncIterator<String>>;
-  birthday: () => Promise<AsyncIterator<DateTimeOutput>>;
-  friends: <T = Promise<AsyncIterator<FriendSubscription>>>(args?: {
-    where?: FriendWhereInput;
-    orderBy?: FriendOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
+  encoding: () => Promise<AsyncIterator<String>>;
 }
 
-export interface UserNullablePromise
-  extends Promise<User | null>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  name: () => Promise<String>;
-  email: () => Promise<String>;
-  password: () => Promise<String>;
-  birthday: () => Promise<DateTimeOutput>;
-  friends: <T = FragmentableArray<Friend>>(args?: {
-    where?: FriendWhereInput;
-    orderBy?: FriendOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
-}
-
-export interface FriendSubscriptionPayload {
+export interface FileSubscriptionPayload {
   mutation: MutationType;
-  node: Friend;
+  node: File;
   updatedFields: String[];
-  previousValues: FriendPreviousValues;
+  previousValues: FilePreviousValues;
 }
 
-export interface FriendSubscriptionPayloadPromise
-  extends Promise<FriendSubscriptionPayload>,
+export interface FileSubscriptionPayloadPromise
+  extends Promise<FileSubscriptionPayload>,
     Fragmentable {
   mutation: () => Promise<MutationType>;
-  node: <T = FriendPromise>() => T;
+  node: <T = FilePromise>() => T;
   updatedFields: () => Promise<String[]>;
-  previousValues: <T = FriendPreviousValuesPromise>() => T;
+  previousValues: <T = FilePreviousValuesPromise>() => T;
 }
 
-export interface FriendSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<FriendSubscriptionPayload>>,
+export interface FileSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<FileSubscriptionPayload>>,
     Fragmentable {
   mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = FriendSubscription>() => T;
+  node: <T = FileSubscription>() => T;
   updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = FriendPreviousValuesSubscription>() => T;
+  previousValues: <T = FilePreviousValuesSubscription>() => T;
 }
 
-export interface FriendConnection {
+export interface File {
+  id: ID_Output;
+  encoding: String;
+}
+
+export interface FilePromise extends Promise<File>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  encoding: () => Promise<String>;
+  author: <T = UserPromise>() => T;
+}
+
+export interface FileSubscription
+  extends Promise<AsyncIterator<File>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  encoding: () => Promise<AsyncIterator<String>>;
+  author: <T = UserSubscription>() => T;
+}
+
+export interface FileNullablePromise
+  extends Promise<File | null>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  encoding: () => Promise<String>;
+  author: <T = UserPromise>() => T;
+}
+
+export interface FileConnection {
   pageInfo: PageInfo;
-  edges: FriendEdge[];
+  edges: FileEdge[];
 }
 
-export interface FriendConnectionPromise
-  extends Promise<FriendConnection>,
+export interface FileConnectionPromise
+  extends Promise<FileConnection>,
     Fragmentable {
   pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<FriendEdge>>() => T;
-  aggregate: <T = AggregateFriendPromise>() => T;
+  edges: <T = FragmentableArray<FileEdge>>() => T;
+  aggregate: <T = AggregateFilePromise>() => T;
 }
 
-export interface FriendConnectionSubscription
-  extends Promise<AsyncIterator<FriendConnection>>,
+export interface FileConnectionSubscription
+  extends Promise<AsyncIterator<FileConnection>>,
     Fragmentable {
   pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<FriendEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateFriendSubscription>() => T;
-}
-
-export interface BatchPayload {
-  count: Long;
-}
-
-export interface BatchPayloadPromise
-  extends Promise<BatchPayload>,
-    Fragmentable {
-  count: () => Promise<Long>;
-}
-
-export interface BatchPayloadSubscription
-  extends Promise<AsyncIterator<BatchPayload>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Long>>;
-}
-
-export interface UserEdge {
-  node: User;
-  cursor: String;
-}
-
-export interface UserEdgePromise extends Promise<UserEdge>, Fragmentable {
-  node: <T = UserPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface UserEdgeSubscription
-  extends Promise<AsyncIterator<UserEdge>>,
-    Fragmentable {
-  node: <T = UserSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
+  edges: <T = Promise<AsyncIterator<FileEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateFileSubscription>() => T;
 }
 
 export interface UserSubscriptionPayload {
@@ -893,10 +1334,53 @@ export interface UserSubscriptionPayloadSubscription
   previousValues: <T = UserPreviousValuesSubscription>() => T;
 }
 
+export interface FriendSubscriptionPayload {
+  mutation: MutationType;
+  node: Friend;
+  updatedFields: String[];
+  previousValues: FriendPreviousValues;
+}
+
+export interface FriendSubscriptionPayloadPromise
+  extends Promise<FriendSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = FriendPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = FriendPreviousValuesPromise>() => T;
+}
+
+export interface FriendSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<FriendSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = FriendSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = FriendPreviousValuesSubscription>() => T;
+}
+
+export interface UserEdge {
+  node: User;
+  cursor: String;
+}
+
+export interface UserEdgePromise extends Promise<UserEdge>, Fragmentable {
+  node: <T = UserPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface UserEdgeSubscription
+  extends Promise<AsyncIterator<UserEdge>>,
+    Fragmentable {
+  node: <T = UserSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
 export interface FriendPreviousValues {
   id: ID_Output;
-  name?: String;
-  defaultName: String;
+  nickname?: String;
+  firstName: String;
+  lastName: String;
   friendId: String;
   chatRoomId: String;
   permission: Boolean;
@@ -906,8 +1390,9 @@ export interface FriendPreviousValuesPromise
   extends Promise<FriendPreviousValues>,
     Fragmentable {
   id: () => Promise<ID_Output>;
-  name: () => Promise<String>;
-  defaultName: () => Promise<String>;
+  nickname: () => Promise<String>;
+  firstName: () => Promise<String>;
+  lastName: () => Promise<String>;
   friendId: () => Promise<String>;
   chatRoomId: () => Promise<String>;
   permission: () => Promise<Boolean>;
@@ -917,32 +1402,12 @@ export interface FriendPreviousValuesSubscription
   extends Promise<AsyncIterator<FriendPreviousValues>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
-  name: () => Promise<AsyncIterator<String>>;
-  defaultName: () => Promise<AsyncIterator<String>>;
+  nickname: () => Promise<AsyncIterator<String>>;
+  firstName: () => Promise<AsyncIterator<String>>;
+  lastName: () => Promise<AsyncIterator<String>>;
   friendId: () => Promise<AsyncIterator<String>>;
   chatRoomId: () => Promise<AsyncIterator<String>>;
   permission: () => Promise<AsyncIterator<Boolean>>;
-}
-
-export interface UserConnection {
-  pageInfo: PageInfo;
-  edges: UserEdge[];
-}
-
-export interface UserConnectionPromise
-  extends Promise<UserConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<UserEdge>>() => T;
-  aggregate: <T = AggregateUserPromise>() => T;
-}
-
-export interface UserConnectionSubscription
-  extends Promise<AsyncIterator<UserConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<UserEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateUserSubscription>() => T;
 }
 
 /*
@@ -958,10 +1423,9 @@ export type DateTimeOutput = string;
 export type Long = string;
 
 /*
-The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as `"4"`) or integer (such as `4`) input value will be accepted as an ID.
+The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1.
 */
-export type ID_Input = string | number;
-export type ID_Output = string;
+export type Int = number;
 
 /*
 The `Boolean` scalar type represents `true` or `false`.
@@ -969,14 +1433,15 @@ The `Boolean` scalar type represents `true` or `false`.
 export type Boolean = boolean;
 
 /*
+The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as `"4"`) or integer (such as `4`) input value will be accepted as an ID.
+*/
+export type ID_Input = string | number;
+export type ID_Output = string;
+
+/*
 The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
 */
 export type String = string;
-
-/*
-The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1.
-*/
-export type Int = number;
 
 /**
  * Model Metadata
@@ -989,6 +1454,18 @@ export const models: Model[] = [
   },
   {
     name: "Friend",
+    embedded: false
+  },
+  {
+    name: "File",
+    embedded: false
+  },
+  {
+    name: "Faculty",
+    embedded: false
+  },
+  {
+    name: "Major",
     embedded: false
   }
 ];

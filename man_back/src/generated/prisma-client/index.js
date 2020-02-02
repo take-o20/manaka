@@ -11,6 +11,18 @@ var models = [
   {
     name: "Friend",
     embedded: false
+  },
+  {
+    name: "File",
+    embedded: false
+  },
+  {
+    name: "Faculty",
+    embedded: false
+  },
+  {
+    name: "Major",
+    embedded: false
   }
 ];
 exports.Prisma = prisma_lib_1.makePrismaClientClass({

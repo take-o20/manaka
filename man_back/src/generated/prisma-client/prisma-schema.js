@@ -3,7 +3,11 @@ module.exports = {
   // Please don't change this file manually but run `prisma generate` to update it.
   // For more information, please read the docs: https://www.prisma.io/docs/prisma-client/
 
-/* GraphQL */ `type AggregateFriend {
+/* GraphQL */ `type AggregateFile {
+  count: Int!
+}
+
+type AggregateFriend {
   count: Int!
 }
 
@@ -17,10 +21,138 @@ type BatchPayload {
 
 scalar DateTime
 
+type File {
+  id: ID!
+  encoding: String!
+  author: User!
+}
+
+type FileConnection {
+  pageInfo: PageInfo!
+  edges: [FileEdge]!
+  aggregate: AggregateFile!
+}
+
+input FileCreateInput {
+  encoding: String!
+  author: UserCreateOneWithoutProfileFileInput!
+}
+
+input FileCreateOneWithoutAuthorInput {
+  create: FileCreateWithoutAuthorInput
+  connect: FileWhereUniqueInput
+}
+
+input FileCreateWithoutAuthorInput {
+  encoding: String!
+}
+
+type FileEdge {
+  node: File!
+  cursor: String!
+}
+
+enum FileOrderByInput {
+  id_ASC
+  id_DESC
+  encoding_ASC
+  encoding_DESC
+}
+
+type FilePreviousValues {
+  id: ID!
+  encoding: String!
+}
+
+type FileSubscriptionPayload {
+  mutation: MutationType!
+  node: File
+  updatedFields: [String!]
+  previousValues: FilePreviousValues
+}
+
+input FileSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: FileWhereInput
+  AND: [FileSubscriptionWhereInput!]
+  OR: [FileSubscriptionWhereInput!]
+  NOT: [FileSubscriptionWhereInput!]
+}
+
+input FileUpdateInput {
+  encoding: String
+  author: UserUpdateOneRequiredWithoutProfileFileInput
+}
+
+input FileUpdateManyMutationInput {
+  encoding: String
+}
+
+input FileUpdateOneWithoutAuthorInput {
+  create: FileCreateWithoutAuthorInput
+  update: FileUpdateWithoutAuthorDataInput
+  upsert: FileUpsertWithoutAuthorInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: FileWhereUniqueInput
+}
+
+input FileUpdateWithoutAuthorDataInput {
+  encoding: String
+}
+
+input FileUpsertWithoutAuthorInput {
+  update: FileUpdateWithoutAuthorDataInput!
+  create: FileCreateWithoutAuthorInput!
+}
+
+input FileWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  encoding: String
+  encoding_not: String
+  encoding_in: [String!]
+  encoding_not_in: [String!]
+  encoding_lt: String
+  encoding_lte: String
+  encoding_gt: String
+  encoding_gte: String
+  encoding_contains: String
+  encoding_not_contains: String
+  encoding_starts_with: String
+  encoding_not_starts_with: String
+  encoding_ends_with: String
+  encoding_not_ends_with: String
+  author: UserWhereInput
+  AND: [FileWhereInput!]
+  OR: [FileWhereInput!]
+  NOT: [FileWhereInput!]
+}
+
+input FileWhereUniqueInput {
+  id: ID
+}
+
 type Friend {
   id: ID!
-  name: String
-  defaultName: String!
+  nickname: String
+  firstName: String!
+  lastName: String!
   friendId: String!
   author: User!
   chatRoomId: String!
@@ -34,8 +166,9 @@ type FriendConnection {
 }
 
 input FriendCreateInput {
-  name: String
-  defaultName: String!
+  nickname: String
+  firstName: String!
+  lastName: String!
   friendId: String!
   author: UserCreateOneWithoutFriendsInput!
   chatRoomId: String!
@@ -48,8 +181,9 @@ input FriendCreateManyWithoutAuthorInput {
 }
 
 input FriendCreateWithoutAuthorInput {
-  name: String
-  defaultName: String!
+  nickname: String
+  firstName: String!
+  lastName: String!
   friendId: String!
   chatRoomId: String!
   permission: Boolean
@@ -63,10 +197,12 @@ type FriendEdge {
 enum FriendOrderByInput {
   id_ASC
   id_DESC
-  name_ASC
-  name_DESC
-  defaultName_ASC
-  defaultName_DESC
+  nickname_ASC
+  nickname_DESC
+  firstName_ASC
+  firstName_DESC
+  lastName_ASC
+  lastName_DESC
   friendId_ASC
   friendId_DESC
   chatRoomId_ASC
@@ -77,8 +213,9 @@ enum FriendOrderByInput {
 
 type FriendPreviousValues {
   id: ID!
-  name: String
-  defaultName: String!
+  nickname: String
+  firstName: String!
+  lastName: String!
   friendId: String!
   chatRoomId: String!
   permission: Boolean!
@@ -99,34 +236,48 @@ input FriendScalarWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
-  name: String
-  name_not: String
-  name_in: [String!]
-  name_not_in: [String!]
-  name_lt: String
-  name_lte: String
-  name_gt: String
-  name_gte: String
-  name_contains: String
-  name_not_contains: String
-  name_starts_with: String
-  name_not_starts_with: String
-  name_ends_with: String
-  name_not_ends_with: String
-  defaultName: String
-  defaultName_not: String
-  defaultName_in: [String!]
-  defaultName_not_in: [String!]
-  defaultName_lt: String
-  defaultName_lte: String
-  defaultName_gt: String
-  defaultName_gte: String
-  defaultName_contains: String
-  defaultName_not_contains: String
-  defaultName_starts_with: String
-  defaultName_not_starts_with: String
-  defaultName_ends_with: String
-  defaultName_not_ends_with: String
+  nickname: String
+  nickname_not: String
+  nickname_in: [String!]
+  nickname_not_in: [String!]
+  nickname_lt: String
+  nickname_lte: String
+  nickname_gt: String
+  nickname_gte: String
+  nickname_contains: String
+  nickname_not_contains: String
+  nickname_starts_with: String
+  nickname_not_starts_with: String
+  nickname_ends_with: String
+  nickname_not_ends_with: String
+  firstName: String
+  firstName_not: String
+  firstName_in: [String!]
+  firstName_not_in: [String!]
+  firstName_lt: String
+  firstName_lte: String
+  firstName_gt: String
+  firstName_gte: String
+  firstName_contains: String
+  firstName_not_contains: String
+  firstName_starts_with: String
+  firstName_not_starts_with: String
+  firstName_ends_with: String
+  firstName_not_ends_with: String
+  lastName: String
+  lastName_not: String
+  lastName_in: [String!]
+  lastName_not_in: [String!]
+  lastName_lt: String
+  lastName_lte: String
+  lastName_gt: String
+  lastName_gte: String
+  lastName_contains: String
+  lastName_not_contains: String
+  lastName_starts_with: String
+  lastName_not_starts_with: String
+  lastName_ends_with: String
+  lastName_not_ends_with: String
   friendId: String
   friendId_not: String
   friendId_in: [String!]
@@ -181,8 +332,9 @@ input FriendSubscriptionWhereInput {
 }
 
 input FriendUpdateInput {
-  name: String
-  defaultName: String
+  nickname: String
+  firstName: String
+  lastName: String
   friendId: String
   author: UserUpdateOneRequiredWithoutFriendsInput
   chatRoomId: String
@@ -190,16 +342,18 @@ input FriendUpdateInput {
 }
 
 input FriendUpdateManyDataInput {
-  name: String
-  defaultName: String
+  nickname: String
+  firstName: String
+  lastName: String
   friendId: String
   chatRoomId: String
   permission: Boolean
 }
 
 input FriendUpdateManyMutationInput {
-  name: String
-  defaultName: String
+  nickname: String
+  firstName: String
+  lastName: String
   friendId: String
   chatRoomId: String
   permission: Boolean
@@ -223,8 +377,9 @@ input FriendUpdateManyWithWhereNestedInput {
 }
 
 input FriendUpdateWithoutAuthorDataInput {
-  name: String
-  defaultName: String
+  nickname: String
+  firstName: String
+  lastName: String
   friendId: String
   chatRoomId: String
   permission: Boolean
@@ -256,34 +411,48 @@ input FriendWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
-  name: String
-  name_not: String
-  name_in: [String!]
-  name_not_in: [String!]
-  name_lt: String
-  name_lte: String
-  name_gt: String
-  name_gte: String
-  name_contains: String
-  name_not_contains: String
-  name_starts_with: String
-  name_not_starts_with: String
-  name_ends_with: String
-  name_not_ends_with: String
-  defaultName: String
-  defaultName_not: String
-  defaultName_in: [String!]
-  defaultName_not_in: [String!]
-  defaultName_lt: String
-  defaultName_lte: String
-  defaultName_gt: String
-  defaultName_gte: String
-  defaultName_contains: String
-  defaultName_not_contains: String
-  defaultName_starts_with: String
-  defaultName_not_starts_with: String
-  defaultName_ends_with: String
-  defaultName_not_ends_with: String
+  nickname: String
+  nickname_not: String
+  nickname_in: [String!]
+  nickname_not_in: [String!]
+  nickname_lt: String
+  nickname_lte: String
+  nickname_gt: String
+  nickname_gte: String
+  nickname_contains: String
+  nickname_not_contains: String
+  nickname_starts_with: String
+  nickname_not_starts_with: String
+  nickname_ends_with: String
+  nickname_not_ends_with: String
+  firstName: String
+  firstName_not: String
+  firstName_in: [String!]
+  firstName_not_in: [String!]
+  firstName_lt: String
+  firstName_lte: String
+  firstName_gt: String
+  firstName_gte: String
+  firstName_contains: String
+  firstName_not_contains: String
+  firstName_starts_with: String
+  firstName_not_starts_with: String
+  firstName_ends_with: String
+  firstName_not_ends_with: String
+  lastName: String
+  lastName_not: String
+  lastName_in: [String!]
+  lastName_not_in: [String!]
+  lastName_lt: String
+  lastName_lte: String
+  lastName_gt: String
+  lastName_gte: String
+  lastName_contains: String
+  lastName_not_contains: String
+  lastName_starts_with: String
+  lastName_not_starts_with: String
+  lastName_ends_with: String
+  lastName_not_ends_with: String
   friendId: String
   friendId_not: String
   friendId_in: [String!]
@@ -327,6 +496,12 @@ input FriendWhereUniqueInput {
 scalar Long
 
 type Mutation {
+  createFile(data: FileCreateInput!): File!
+  updateFile(data: FileUpdateInput!, where: FileWhereUniqueInput!): File
+  updateManyFiles(data: FileUpdateManyMutationInput!, where: FileWhereInput): BatchPayload!
+  upsertFile(where: FileWhereUniqueInput!, create: FileCreateInput!, update: FileUpdateInput!): File!
+  deleteFile(where: FileWhereUniqueInput!): File
+  deleteManyFiles(where: FileWhereInput): BatchPayload!
   createFriend(data: FriendCreateInput!): Friend!
   updateFriend(data: FriendUpdateInput!, where: FriendWhereUniqueInput!): Friend
   updateManyFriends(data: FriendUpdateManyMutationInput!, where: FriendWhereInput): BatchPayload!
@@ -359,6 +534,9 @@ type PageInfo {
 }
 
 type Query {
+  file(where: FileWhereUniqueInput!): File
+  files(where: FileWhereInput, orderBy: FileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [File]!
+  filesConnection(where: FileWhereInput, orderBy: FileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): FileConnection!
   friend(where: FriendWhereUniqueInput!): Friend
   friends(where: FriendWhereInput, orderBy: FriendOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Friend]!
   friendsConnection(where: FriendWhereInput, orderBy: FriendOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): FriendConnection!
@@ -369,17 +547,23 @@ type Query {
 }
 
 type Subscription {
+  file(where: FileSubscriptionWhereInput): FileSubscriptionPayload
   friend(where: FriendSubscriptionWhereInput): FriendSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
 }
 
 type User {
   id: ID!
-  name: String!
+  nickname: String
+  firstName: String!
+  lastName: String!
   email: String!
   password: String!
   birthday: DateTime
+  phoneNumber: String
   friends(where: FriendWhereInput, orderBy: FriendOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Friend!]
+  biography: String
+  profileFile: File
 }
 
 type UserConnection {
@@ -389,11 +573,16 @@ type UserConnection {
 }
 
 input UserCreateInput {
-  name: String!
+  nickname: String
+  firstName: String!
+  lastName: String!
   email: String!
   password: String!
   birthday: DateTime
+  phoneNumber: String
   friends: FriendCreateManyWithoutAuthorInput
+  biography: String
+  profileFile: FileCreateOneWithoutAuthorInput
 }
 
 input UserCreateOneWithoutFriendsInput {
@@ -401,11 +590,33 @@ input UserCreateOneWithoutFriendsInput {
   connect: UserWhereUniqueInput
 }
 
+input UserCreateOneWithoutProfileFileInput {
+  create: UserCreateWithoutProfileFileInput
+  connect: UserWhereUniqueInput
+}
+
 input UserCreateWithoutFriendsInput {
-  name: String!
+  nickname: String
+  firstName: String!
+  lastName: String!
   email: String!
   password: String!
   birthday: DateTime
+  phoneNumber: String
+  biography: String
+  profileFile: FileCreateOneWithoutAuthorInput
+}
+
+input UserCreateWithoutProfileFileInput {
+  nickname: String
+  firstName: String!
+  lastName: String!
+  email: String!
+  password: String!
+  birthday: DateTime
+  phoneNumber: String
+  friends: FriendCreateManyWithoutAuthorInput
+  biography: String
 }
 
 type UserEdge {
@@ -416,22 +627,34 @@ type UserEdge {
 enum UserOrderByInput {
   id_ASC
   id_DESC
-  name_ASC
-  name_DESC
+  nickname_ASC
+  nickname_DESC
+  firstName_ASC
+  firstName_DESC
+  lastName_ASC
+  lastName_DESC
   email_ASC
   email_DESC
   password_ASC
   password_DESC
   birthday_ASC
   birthday_DESC
+  phoneNumber_ASC
+  phoneNumber_DESC
+  biography_ASC
+  biography_DESC
 }
 
 type UserPreviousValues {
   id: ID!
-  name: String!
+  nickname: String
+  firstName: String!
+  lastName: String!
   email: String!
   password: String!
   birthday: DateTime
+  phoneNumber: String
+  biography: String
 }
 
 type UserSubscriptionPayload {
@@ -453,18 +676,27 @@ input UserSubscriptionWhereInput {
 }
 
 input UserUpdateInput {
-  name: String
+  nickname: String
+  firstName: String
+  lastName: String
   email: String
   password: String
   birthday: DateTime
+  phoneNumber: String
   friends: FriendUpdateManyWithoutAuthorInput
+  biography: String
+  profileFile: FileUpdateOneWithoutAuthorInput
 }
 
 input UserUpdateManyMutationInput {
-  name: String
+  nickname: String
+  firstName: String
+  lastName: String
   email: String
   password: String
   birthday: DateTime
+  phoneNumber: String
+  biography: String
 }
 
 input UserUpdateOneRequiredWithoutFriendsInput {
@@ -474,16 +706,45 @@ input UserUpdateOneRequiredWithoutFriendsInput {
   connect: UserWhereUniqueInput
 }
 
+input UserUpdateOneRequiredWithoutProfileFileInput {
+  create: UserCreateWithoutProfileFileInput
+  update: UserUpdateWithoutProfileFileDataInput
+  upsert: UserUpsertWithoutProfileFileInput
+  connect: UserWhereUniqueInput
+}
+
 input UserUpdateWithoutFriendsDataInput {
-  name: String
+  nickname: String
+  firstName: String
+  lastName: String
   email: String
   password: String
   birthday: DateTime
+  phoneNumber: String
+  biography: String
+  profileFile: FileUpdateOneWithoutAuthorInput
+}
+
+input UserUpdateWithoutProfileFileDataInput {
+  nickname: String
+  firstName: String
+  lastName: String
+  email: String
+  password: String
+  birthday: DateTime
+  phoneNumber: String
+  friends: FriendUpdateManyWithoutAuthorInput
+  biography: String
 }
 
 input UserUpsertWithoutFriendsInput {
   update: UserUpdateWithoutFriendsDataInput!
   create: UserCreateWithoutFriendsInput!
+}
+
+input UserUpsertWithoutProfileFileInput {
+  update: UserUpdateWithoutProfileFileDataInput!
+  create: UserCreateWithoutProfileFileInput!
 }
 
 input UserWhereInput {
@@ -501,20 +762,48 @@ input UserWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
-  name: String
-  name_not: String
-  name_in: [String!]
-  name_not_in: [String!]
-  name_lt: String
-  name_lte: String
-  name_gt: String
-  name_gte: String
-  name_contains: String
-  name_not_contains: String
-  name_starts_with: String
-  name_not_starts_with: String
-  name_ends_with: String
-  name_not_ends_with: String
+  nickname: String
+  nickname_not: String
+  nickname_in: [String!]
+  nickname_not_in: [String!]
+  nickname_lt: String
+  nickname_lte: String
+  nickname_gt: String
+  nickname_gte: String
+  nickname_contains: String
+  nickname_not_contains: String
+  nickname_starts_with: String
+  nickname_not_starts_with: String
+  nickname_ends_with: String
+  nickname_not_ends_with: String
+  firstName: String
+  firstName_not: String
+  firstName_in: [String!]
+  firstName_not_in: [String!]
+  firstName_lt: String
+  firstName_lte: String
+  firstName_gt: String
+  firstName_gte: String
+  firstName_contains: String
+  firstName_not_contains: String
+  firstName_starts_with: String
+  firstName_not_starts_with: String
+  firstName_ends_with: String
+  firstName_not_ends_with: String
+  lastName: String
+  lastName_not: String
+  lastName_in: [String!]
+  lastName_not_in: [String!]
+  lastName_lt: String
+  lastName_lte: String
+  lastName_gt: String
+  lastName_gte: String
+  lastName_contains: String
+  lastName_not_contains: String
+  lastName_starts_with: String
+  lastName_not_starts_with: String
+  lastName_ends_with: String
+  lastName_not_ends_with: String
   email: String
   email_not: String
   email_in: [String!]
@@ -551,9 +840,38 @@ input UserWhereInput {
   birthday_lte: DateTime
   birthday_gt: DateTime
   birthday_gte: DateTime
+  phoneNumber: String
+  phoneNumber_not: String
+  phoneNumber_in: [String!]
+  phoneNumber_not_in: [String!]
+  phoneNumber_lt: String
+  phoneNumber_lte: String
+  phoneNumber_gt: String
+  phoneNumber_gte: String
+  phoneNumber_contains: String
+  phoneNumber_not_contains: String
+  phoneNumber_starts_with: String
+  phoneNumber_not_starts_with: String
+  phoneNumber_ends_with: String
+  phoneNumber_not_ends_with: String
   friends_every: FriendWhereInput
   friends_some: FriendWhereInput
   friends_none: FriendWhereInput
+  biography: String
+  biography_not: String
+  biography_in: [String!]
+  biography_not_in: [String!]
+  biography_lt: String
+  biography_lte: String
+  biography_gt: String
+  biography_gte: String
+  biography_contains: String
+  biography_not_contains: String
+  biography_starts_with: String
+  biography_not_starts_with: String
+  biography_ends_with: String
+  biography_not_ends_with: String
+  profileFile: FileWhereInput
   AND: [UserWhereInput!]
   OR: [UserWhereInput!]
   NOT: [UserWhereInput!]

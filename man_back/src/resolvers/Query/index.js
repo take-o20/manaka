@@ -1,5 +1,5 @@
 import {users, user, friends, friend,
-      friendslist} from './UserInfo/UserInfo'
+      friendslist,profileFile} from './UserInfo/UserInfo'
 
 module.exports = {
   users,
@@ -7,4 +7,5 @@ module.exports = {
   friends,
   friend,
   friendslist,
+  profileFile,
 }

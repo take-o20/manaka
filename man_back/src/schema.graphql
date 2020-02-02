@@ -1,33 +1,97 @@
 type Query {
-  user(id: String!): User!
+  user(input: UserInput!): User!
   users: [User]!
-  friend(id: ID!):Friend!
+  friend(input: FriendInput!):Friend!
   friends:[Friend]! 
-  friendslist(authorId: String!):[Friend]!
+  friendslist(input: FriendsListInput!):[Friend]!
+  profileFile(input:profileFileInput!):File
+}
+input UserInput {
+  id: ID!
+}
+input FriendInput {
+  id: ID!
+}
+input FriendsListInput{
+  authorId: String!
+}
+input profileFileInput{
+  authorId: String!
 }
 type Mutation {
-  signup(email: String!, password: String!, name: String!): AuthPayload
-  login(email: String!, password: String!): AuthPayload
-  addfriend(friendId: ID!,defaultName: String!,authorId: ID!): Friend!
-  friendupdate(id: ID!, permission: Boolean!):Friend!
+  signup(input: SignUpInput!): AuthPayload!
+  login(input: LoginInput!): AuthPayload!
+  addfriend(input: AddFriendInput!): FriendUpdatePayload!
+  friendupdate(input:FriendUpdateInput!):FriendUpdatePayload!
+  uploadfile(input: UploadFileInput!):UploadFilePayload!
 }
+
+input SignUpInput {
+  email: String!
+  password: String!
+  firstName: String!
+  lastName: String!
+  phoneNumber: String
+}
+
+input LoginInput {
+  email: String!
+  password: String!
+}
+
+input AddFriendInput {
+  friendId: ID!
+  firstName: String!
+  lastName: String!
+  authorId: ID!
+}
+
+input FriendUpdateInput {
+  id: ID!
+  permission: Boolean!
+}
+
+input UploadFileInput {
+  encoding: String!
+  authorId: ID!
+}
+
 type AuthPayload {
   token: String
   user: User
 }
 type User {
   id: ID!
-  name: String!
+  nickname: String
+  firstName: String!
+  lastName: String!
   email: String!
+  birthday: String
+  phoneNumber: String
   friends:[Friend!]!
+  biography: String
+  profileFile: File
 }
 
 type Friend{
   id: ID!
-  name: String
-  defaultName: String!
+  nickname: String
+  firstName: String!
+  lastName: String!
   friendId: String!
   author: User!
   chatRoomId: String!
   permission: Boolean!
+}
+type FriendUpdatePayload {
+  friend: Friend!
+}
+
+type File {
+  id: ID!
+  encoding: String!
+  author: User!
+}
+type UploadFilePayload {
+  file: File! 
 }

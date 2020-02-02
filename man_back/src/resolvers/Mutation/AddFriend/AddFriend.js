@@ -2,12 +2,12 @@ import moment from 'moment'
 
 const addfriend = async (parent, args, context, info) => {
   const time = moment().unix()
-  const friendId = args.friendId
-  const defaultName = args.defaultName
-  const authorId = args.authorId
+  const {input} = args
+  const {friendId, firstName, lastName, authorId} = input
   const roomId = authorId  + time + friendId
   const authorData = await context.prisma.user({id: authorId})
-  const authorName = authorData.name
+  const authorFirst = authorData.firstName
+  const authorLast = authorData.lastName
   const isExist  = await context.prisma.friends({
     where:{
     AND: [{
@@ -23,7 +23,8 @@ const addfriend = async (parent, args, context, info) => {
   }
   // database of myself
   const friend =  await context.prisma.createFriend({
-    defaultName,
+    firstName,
+    lastName,
     friendId,
     author:{connect:{id:authorId}},
     chatRoomId: roomId,
@@ -31,17 +32,13 @@ const addfriend = async (parent, args, context, info) => {
   })
   // database of friend chatRoomId is same!!!!
   const friendData = await context.prisma.createFriend({
-    defaultName: authorName,
+    firstName: authorFirst,
+    lastName: authorLast,
     friendId: authorId,
     author:{connect:{id:friendId}},
     chatRoomId: roomId,
   })
-  
-  return {
-    id:friend.id,
-    defaultName:friend.defaultName,
-    friendId: friend.friendId,
-  }
+  return {friend}
 }
 
 export default addfriend
