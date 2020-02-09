@@ -39,10 +39,6 @@ input FileCreateInput {
   encoding: String!
 }
 
-input FileCreateOneInput {
-  create: FileCreateInput
-}
-
 type FileEdge {
   node: File!
   cursor: String!
@@ -81,29 +77,10 @@ input FileSubscriptionWhereInput {
   NOT: [FileSubscriptionWhereInput!]
 }
 
-input FileUpdateDataInput {
-  filename: String
-  mimetype: String
-  encoding: String
-}
-
 input FileUpdateManyMutationInput {
   filename: String
   mimetype: String
   encoding: String
-}
-
-input FileUpdateOneInput {
-  create: FileCreateInput
-  update: FileUpdateDataInput
-  upsert: FileUpsertNestedInput
-  delete: Boolean
-  disconnect: Boolean
-}
-
-input FileUpsertNestedInput {
-  update: FileUpdateDataInput!
-  create: FileCreateInput!
 }
 
 input FileWhereInput {
@@ -565,7 +542,7 @@ type User {
   phoneNumber: String
   friends(where: FriendWhereInput, orderBy: FriendOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Friend!]
   biography: String
-  profileFile: File
+  profileFile: String
 }
 
 type UserConnection {
@@ -584,7 +561,7 @@ input UserCreateInput {
   phoneNumber: String
   friends: FriendCreateManyWithoutAuthorInput
   biography: String
-  profileFile: FileCreateOneInput
+  profileFile: String
 }
 
 input UserCreateOneWithoutFriendsInput {
@@ -601,7 +578,7 @@ input UserCreateWithoutFriendsInput {
   birthday: DateTime
   phoneNumber: String
   biography: String
-  profileFile: FileCreateOneInput
+  profileFile: String
 }
 
 type UserEdge {
@@ -628,6 +605,8 @@ enum UserOrderByInput {
   phoneNumber_DESC
   biography_ASC
   biography_DESC
+  profileFile_ASC
+  profileFile_DESC
 }
 
 type UserPreviousValues {
@@ -640,6 +619,7 @@ type UserPreviousValues {
   birthday: DateTime
   phoneNumber: String
   biography: String
+  profileFile: String
 }
 
 type UserSubscriptionPayload {
@@ -670,7 +650,7 @@ input UserUpdateInput {
   phoneNumber: String
   friends: FriendUpdateManyWithoutAuthorInput
   biography: String
-  profileFile: FileUpdateOneInput
+  profileFile: String
 }
 
 input UserUpdateManyMutationInput {
@@ -682,6 +662,7 @@ input UserUpdateManyMutationInput {
   birthday: DateTime
   phoneNumber: String
   biography: String
+  profileFile: String
 }
 
 input UserUpdateOneRequiredWithoutFriendsInput {
@@ -700,7 +681,7 @@ input UserUpdateWithoutFriendsDataInput {
   birthday: DateTime
   phoneNumber: String
   biography: String
-  profileFile: FileUpdateOneInput
+  profileFile: String
 }
 
 input UserUpsertWithoutFriendsInput {
@@ -832,7 +813,20 @@ input UserWhereInput {
   biography_not_starts_with: String
   biography_ends_with: String
   biography_not_ends_with: String
-  profileFile: FileWhereInput
+  profileFile: String
+  profileFile_not: String
+  profileFile_in: [String!]
+  profileFile_not_in: [String!]
+  profileFile_lt: String
+  profileFile_lte: String
+  profileFile_gt: String
+  profileFile_gte: String
+  profileFile_contains: String
+  profileFile_not_contains: String
+  profileFile_starts_with: String
+  profileFile_not_starts_with: String
+  profileFile_ends_with: String
+  profileFile_not_ends_with: String
   AND: [UserWhereInput!]
   OR: [UserWhereInput!]
   NOT: [UserWhereInput!]

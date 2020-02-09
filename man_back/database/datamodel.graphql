@@ -9,7 +9,7 @@ type User {
   phoneNumber: String
   friends: [Friend!]!
   biography: String
-  profileFile: File
+  profileFile: String
 }
 
 type Friend{

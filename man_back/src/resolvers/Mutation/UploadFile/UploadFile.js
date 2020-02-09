@@ -19,6 +19,7 @@ const uploadfile = async (parent, args, context, info) => {
 }
 const singleUploadStream =  async (parent, args,context, info) => {
   console.log(args)
+  const {userId} = args
   const file = await args.file
   const {createReadStream, filename, mimetype} = file
   const fileStream = createReadStream()
@@ -27,9 +28,22 @@ const singleUploadStream =  async (parent, args,context, info) => {
   const result = await s3.upload(uploadParams).promise()
 
   console.log(result)
+  const user = await context.prisma.updateUser({
+    data:{
+      profileFile:result.Location
+    },
+    where:{
+      id:userId
+    }
+  })
+  console.log(file)
 
-
-  return file;
+  return {
+    user,
+    filename:file.filename,
+    mimetype:file.mimetype,
+    encoding:file.encoding,
+  }
 }
 
 export {uploadfile, singleUploadStream}

@@ -50,20 +50,19 @@ const mutationDefs = gql`
     encoding: String!
   }
   extend type User{
-    profileFile:File
-  }
-  extend type Query {
-    _ : Boolean
+    profileFile:String
   }
   
   extend type Mutation {
-    singleUpload(file: Upload!): File!,
-    singleUploadStream(file: Upload!): File!
+    singleUploadStream(file: Upload!, userId: String!): UploadFilePayload!
   }
 
-  # extend type Mutation {
-  #   singleUploadStream(file: Upload!): File
-  # }
+  type UploadFilePayload {
+    user: User
+    filename:String!
+    mimetype:String!
+    encoding:String!
+  }
 `
 const server = new ApolloServer({
   options,
