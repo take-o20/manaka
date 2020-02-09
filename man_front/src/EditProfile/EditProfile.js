@@ -10,6 +10,9 @@ const UPLOAD_FILE_STREAM = gql`
       filename
       mimetype
       encoding
+      user{
+        profileFile
+      }
     }
   }
 `
@@ -21,8 +24,6 @@ const EditProfile = (props) => {
   const [bio, setBio] = useState('')
   const [password, setPassword] = useState()
   const [confirmPass, setConfirmPass] = useState('')
-  const [src, setSrc] = useState('')
-  const [uploadFileMutate] = useMutation(UPLOADFILE)
   const [uploadFile,{data, loading, error}] = useMutation(UPLOAD_FILE_STREAM)
   const [file, setFile] = useState()
   const onClick = () =>{
@@ -39,6 +40,9 @@ const EditProfile = (props) => {
     file && uploadFile({ variables: { file: file, userId:"ck6egnntm000p08824ciy854j" } })
     file && setFile(file)
   }
+  if(data){
+    console.log("aaaaaaaaaaaaaaaa",data.singleUploadStream)
+  }
   return (
     <div class="container-fluid">
     <div id="it6rz">
@@ -53,8 +57,7 @@ const EditProfile = (props) => {
             <div class="card-body z-depth-2 px-4">
                 <div class="md-form mt-3">
                     <div class="mt-3 md-form">
-                        {file && <img src={file} className="profilePhoto"/>}
-                        <img src="https://manphoto.s3-ap-northeast-1.amazonaws.com/UNADJUSTEDNONRAW_thumb_1.jpg" className="profilePhoto"/>
+                        {data && <img src={data.singleUploadStream.user.profileFile} className="profilePhoto"/>}
                         <input type="file" 
                         onChange={(e) => onChange(e)}
                         multiple 
