@@ -23,12 +23,11 @@ type Friend{
   permission: Boolean! @default(value: false)
 }
 
-type File{
-  id: ID! @unique
+type File {
+  filename: String!
+  mimetype: String!
   encoding: String!
-  author: User! 
 }
-
 enum Faculty {
   FSE
   CSE

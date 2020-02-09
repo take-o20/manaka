@@ -4,7 +4,6 @@ type Query {
   friend(input: FriendInput!):Friend!
   friends:[Friend]! 
   friendslist(input: FriendsListInput!):[Friend]!
-  profileFile(input:profileFileInput!):File
 }
 input UserInput {
   id: ID!
@@ -23,7 +22,6 @@ type Mutation {
   login(input: LoginInput!): AuthPayload!
   addfriend(input: AddFriendInput!): FriendUpdatePayload!
   friendupdate(input:FriendUpdateInput!):FriendUpdatePayload!
-  uploadfile(input: UploadFileInput!):UploadFilePayload!
 }
 
 input SignUpInput {
@@ -51,10 +49,6 @@ input FriendUpdateInput {
   permission: Boolean!
 }
 
-input UploadFileInput {
-  encoding: String!
-  authorId: ID!
-}
 
 type AuthPayload {
   token: String
@@ -70,7 +64,6 @@ type User {
   phoneNumber: String
   friends:[Friend!]!
   biography: String
-  profileFile: File
 }
 
 type Friend{
@@ -85,13 +78,4 @@ type Friend{
 }
 type FriendUpdatePayload {
   friend: Friend!
-}
-
-type File {
-  id: ID!
-  encoding: String!
-  author: User!
-}
-type UploadFilePayload {
-  file: File! 
 }

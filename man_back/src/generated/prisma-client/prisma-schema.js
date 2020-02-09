@@ -22,9 +22,9 @@ type BatchPayload {
 scalar DateTime
 
 type File {
-  id: ID!
+  filename: String!
+  mimetype: String!
   encoding: String!
-  author: User!
 }
 
 type FileConnection {
@@ -34,17 +34,13 @@ type FileConnection {
 }
 
 input FileCreateInput {
+  filename: String!
+  mimetype: String!
   encoding: String!
-  author: UserCreateOneWithoutProfileFileInput!
 }
 
-input FileCreateOneWithoutAuthorInput {
-  create: FileCreateWithoutAuthorInput
-  connect: FileWhereUniqueInput
-}
-
-input FileCreateWithoutAuthorInput {
-  encoding: String!
+input FileCreateOneInput {
+  create: FileCreateInput
 }
 
 type FileEdge {
@@ -53,14 +49,17 @@ type FileEdge {
 }
 
 enum FileOrderByInput {
-  id_ASC
-  id_DESC
+  filename_ASC
+  filename_DESC
+  mimetype_ASC
+  mimetype_DESC
   encoding_ASC
   encoding_DESC
 }
 
 type FilePreviousValues {
-  id: ID!
+  filename: String!
+  mimetype: String!
   encoding: String!
 }
 
@@ -82,48 +81,60 @@ input FileSubscriptionWhereInput {
   NOT: [FileSubscriptionWhereInput!]
 }
 
-input FileUpdateInput {
+input FileUpdateDataInput {
+  filename: String
+  mimetype: String
   encoding: String
-  author: UserUpdateOneRequiredWithoutProfileFileInput
 }
 
 input FileUpdateManyMutationInput {
+  filename: String
+  mimetype: String
   encoding: String
 }
 
-input FileUpdateOneWithoutAuthorInput {
-  create: FileCreateWithoutAuthorInput
-  update: FileUpdateWithoutAuthorDataInput
-  upsert: FileUpsertWithoutAuthorInput
+input FileUpdateOneInput {
+  create: FileCreateInput
+  update: FileUpdateDataInput
+  upsert: FileUpsertNestedInput
   delete: Boolean
   disconnect: Boolean
-  connect: FileWhereUniqueInput
 }
 
-input FileUpdateWithoutAuthorDataInput {
-  encoding: String
-}
-
-input FileUpsertWithoutAuthorInput {
-  update: FileUpdateWithoutAuthorDataInput!
-  create: FileCreateWithoutAuthorInput!
+input FileUpsertNestedInput {
+  update: FileUpdateDataInput!
+  create: FileCreateInput!
 }
 
 input FileWhereInput {
-  id: ID
-  id_not: ID
-  id_in: [ID!]
-  id_not_in: [ID!]
-  id_lt: ID
-  id_lte: ID
-  id_gt: ID
-  id_gte: ID
-  id_contains: ID
-  id_not_contains: ID
-  id_starts_with: ID
-  id_not_starts_with: ID
-  id_ends_with: ID
-  id_not_ends_with: ID
+  filename: String
+  filename_not: String
+  filename_in: [String!]
+  filename_not_in: [String!]
+  filename_lt: String
+  filename_lte: String
+  filename_gt: String
+  filename_gte: String
+  filename_contains: String
+  filename_not_contains: String
+  filename_starts_with: String
+  filename_not_starts_with: String
+  filename_ends_with: String
+  filename_not_ends_with: String
+  mimetype: String
+  mimetype_not: String
+  mimetype_in: [String!]
+  mimetype_not_in: [String!]
+  mimetype_lt: String
+  mimetype_lte: String
+  mimetype_gt: String
+  mimetype_gte: String
+  mimetype_contains: String
+  mimetype_not_contains: String
+  mimetype_starts_with: String
+  mimetype_not_starts_with: String
+  mimetype_ends_with: String
+  mimetype_not_ends_with: String
   encoding: String
   encoding_not: String
   encoding_in: [String!]
@@ -138,14 +149,9 @@ input FileWhereInput {
   encoding_not_starts_with: String
   encoding_ends_with: String
   encoding_not_ends_with: String
-  author: UserWhereInput
   AND: [FileWhereInput!]
   OR: [FileWhereInput!]
   NOT: [FileWhereInput!]
-}
-
-input FileWhereUniqueInput {
-  id: ID
 }
 
 type Friend {
@@ -497,10 +503,7 @@ scalar Long
 
 type Mutation {
   createFile(data: FileCreateInput!): File!
-  updateFile(data: FileUpdateInput!, where: FileWhereUniqueInput!): File
   updateManyFiles(data: FileUpdateManyMutationInput!, where: FileWhereInput): BatchPayload!
-  upsertFile(where: FileWhereUniqueInput!, create: FileCreateInput!, update: FileUpdateInput!): File!
-  deleteFile(where: FileWhereUniqueInput!): File
   deleteManyFiles(where: FileWhereInput): BatchPayload!
   createFriend(data: FriendCreateInput!): Friend!
   updateFriend(data: FriendUpdateInput!, where: FriendWhereUniqueInput!): Friend
@@ -534,7 +537,6 @@ type PageInfo {
 }
 
 type Query {
-  file(where: FileWhereUniqueInput!): File
   files(where: FileWhereInput, orderBy: FileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [File]!
   filesConnection(where: FileWhereInput, orderBy: FileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): FileConnection!
   friend(where: FriendWhereUniqueInput!): Friend
@@ -582,16 +584,11 @@ input UserCreateInput {
   phoneNumber: String
   friends: FriendCreateManyWithoutAuthorInput
   biography: String
-  profileFile: FileCreateOneWithoutAuthorInput
+  profileFile: FileCreateOneInput
 }
 
 input UserCreateOneWithoutFriendsInput {
   create: UserCreateWithoutFriendsInput
-  connect: UserWhereUniqueInput
-}
-
-input UserCreateOneWithoutProfileFileInput {
-  create: UserCreateWithoutProfileFileInput
   connect: UserWhereUniqueInput
 }
 
@@ -604,19 +601,7 @@ input UserCreateWithoutFriendsInput {
   birthday: DateTime
   phoneNumber: String
   biography: String
-  profileFile: FileCreateOneWithoutAuthorInput
-}
-
-input UserCreateWithoutProfileFileInput {
-  nickname: String
-  firstName: String!
-  lastName: String!
-  email: String!
-  password: String!
-  birthday: DateTime
-  phoneNumber: String
-  friends: FriendCreateManyWithoutAuthorInput
-  biography: String
+  profileFile: FileCreateOneInput
 }
 
 type UserEdge {
@@ -685,7 +670,7 @@ input UserUpdateInput {
   phoneNumber: String
   friends: FriendUpdateManyWithoutAuthorInput
   biography: String
-  profileFile: FileUpdateOneWithoutAuthorInput
+  profileFile: FileUpdateOneInput
 }
 
 input UserUpdateManyMutationInput {
@@ -706,13 +691,6 @@ input UserUpdateOneRequiredWithoutFriendsInput {
   connect: UserWhereUniqueInput
 }
 
-input UserUpdateOneRequiredWithoutProfileFileInput {
-  create: UserCreateWithoutProfileFileInput
-  update: UserUpdateWithoutProfileFileDataInput
-  upsert: UserUpsertWithoutProfileFileInput
-  connect: UserWhereUniqueInput
-}
-
 input UserUpdateWithoutFriendsDataInput {
   nickname: String
   firstName: String
@@ -722,29 +700,12 @@ input UserUpdateWithoutFriendsDataInput {
   birthday: DateTime
   phoneNumber: String
   biography: String
-  profileFile: FileUpdateOneWithoutAuthorInput
-}
-
-input UserUpdateWithoutProfileFileDataInput {
-  nickname: String
-  firstName: String
-  lastName: String
-  email: String
-  password: String
-  birthday: DateTime
-  phoneNumber: String
-  friends: FriendUpdateManyWithoutAuthorInput
-  biography: String
+  profileFile: FileUpdateOneInput
 }
 
 input UserUpsertWithoutFriendsInput {
   update: UserUpdateWithoutFriendsDataInput!
   create: UserCreateWithoutFriendsInput!
-}
-
-input UserUpsertWithoutProfileFileInput {
-  update: UserUpdateWithoutProfileFileDataInput!
-  create: UserCreateWithoutProfileFileInput!
 }
 
 input UserWhereInput {

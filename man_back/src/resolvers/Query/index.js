@@ -7,5 +7,5 @@ module.exports = {
   friends,
   friend,
   friendslist,
-  profileFile,
+  // profileFile,
 }

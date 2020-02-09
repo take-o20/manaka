@@ -40,7 +40,6 @@ export interface Prisma {
    * Queries
    */
 
-  file: (where: FileWhereUniqueInput) => FileNullablePromise;
   files: (args?: {
     where?: FileWhereInput;
     orderBy?: FileOrderByInput;
@@ -104,20 +103,10 @@ export interface Prisma {
    */
 
   createFile: (data: FileCreateInput) => FilePromise;
-  updateFile: (args: {
-    data: FileUpdateInput;
-    where: FileWhereUniqueInput;
-  }) => FilePromise;
   updateManyFiles: (args: {
     data: FileUpdateManyMutationInput;
     where?: FileWhereInput;
   }) => BatchPayloadPromise;
-  upsertFile: (args: {
-    where: FileWhereUniqueInput;
-    create: FileCreateInput;
-    update: FileUpdateInput;
-  }) => FilePromise;
-  deleteFile: (where: FileWhereUniqueInput) => FilePromise;
   deleteManyFiles: (where?: FileWhereInput) => BatchPayloadPromise;
   createFriend: (data: FriendCreateInput) => FriendPromise;
   updateFriend: (args: {
@@ -195,12 +184,6 @@ export type FriendOrderByInput =
   | "permission_ASC"
   | "permission_DESC";
 
-export type FileOrderByInput =
-  | "id_ASC"
-  | "id_DESC"
-  | "encoding_ASC"
-  | "encoding_DESC";
-
 export type UserOrderByInput =
   | "id_ASC"
   | "id_DESC"
@@ -223,37 +206,147 @@ export type UserOrderByInput =
 
 export type MutationType = "CREATED" | "UPDATED" | "DELETED";
 
-export interface FriendUpdateManyWithoutAuthorInput {
+export type FileOrderByInput =
+  | "filename_ASC"
+  | "filename_DESC"
+  | "mimetype_ASC"
+  | "mimetype_DESC"
+  | "encoding_ASC"
+  | "encoding_DESC";
+
+export interface UserCreateOneWithoutFriendsInput {
+  create?: Maybe<UserCreateWithoutFriendsInput>;
+  connect?: Maybe<UserWhereUniqueInput>;
+}
+
+export interface FileWhereInput {
+  filename?: Maybe<String>;
+  filename_not?: Maybe<String>;
+  filename_in?: Maybe<String[] | String>;
+  filename_not_in?: Maybe<String[] | String>;
+  filename_lt?: Maybe<String>;
+  filename_lte?: Maybe<String>;
+  filename_gt?: Maybe<String>;
+  filename_gte?: Maybe<String>;
+  filename_contains?: Maybe<String>;
+  filename_not_contains?: Maybe<String>;
+  filename_starts_with?: Maybe<String>;
+  filename_not_starts_with?: Maybe<String>;
+  filename_ends_with?: Maybe<String>;
+  filename_not_ends_with?: Maybe<String>;
+  mimetype?: Maybe<String>;
+  mimetype_not?: Maybe<String>;
+  mimetype_in?: Maybe<String[] | String>;
+  mimetype_not_in?: Maybe<String[] | String>;
+  mimetype_lt?: Maybe<String>;
+  mimetype_lte?: Maybe<String>;
+  mimetype_gt?: Maybe<String>;
+  mimetype_gte?: Maybe<String>;
+  mimetype_contains?: Maybe<String>;
+  mimetype_not_contains?: Maybe<String>;
+  mimetype_starts_with?: Maybe<String>;
+  mimetype_not_starts_with?: Maybe<String>;
+  mimetype_ends_with?: Maybe<String>;
+  mimetype_not_ends_with?: Maybe<String>;
+  encoding?: Maybe<String>;
+  encoding_not?: Maybe<String>;
+  encoding_in?: Maybe<String[] | String>;
+  encoding_not_in?: Maybe<String[] | String>;
+  encoding_lt?: Maybe<String>;
+  encoding_lte?: Maybe<String>;
+  encoding_gt?: Maybe<String>;
+  encoding_gte?: Maybe<String>;
+  encoding_contains?: Maybe<String>;
+  encoding_not_contains?: Maybe<String>;
+  encoding_starts_with?: Maybe<String>;
+  encoding_not_starts_with?: Maybe<String>;
+  encoding_ends_with?: Maybe<String>;
+  encoding_not_ends_with?: Maybe<String>;
+  AND?: Maybe<FileWhereInput[] | FileWhereInput>;
+  OR?: Maybe<FileWhereInput[] | FileWhereInput>;
+  NOT?: Maybe<FileWhereInput[] | FileWhereInput>;
+}
+
+export interface UserUpdateInput {
+  nickname?: Maybe<String>;
+  firstName?: Maybe<String>;
+  lastName?: Maybe<String>;
+  email?: Maybe<String>;
+  password?: Maybe<String>;
+  birthday?: Maybe<DateTimeInput>;
+  phoneNumber?: Maybe<String>;
+  friends?: Maybe<FriendUpdateManyWithoutAuthorInput>;
+  biography?: Maybe<String>;
+  profileFile?: Maybe<FileUpdateOneInput>;
+}
+
+export interface FileUpdateDataInput {
+  filename?: Maybe<String>;
+  mimetype?: Maybe<String>;
+  encoding?: Maybe<String>;
+}
+
+export interface FriendCreateWithoutAuthorInput {
+  nickname?: Maybe<String>;
+  firstName: String;
+  lastName: String;
+  friendId: String;
+  chatRoomId: String;
+  permission?: Maybe<Boolean>;
+}
+
+export interface FriendUpdateInput {
+  nickname?: Maybe<String>;
+  firstName?: Maybe<String>;
+  lastName?: Maybe<String>;
+  friendId?: Maybe<String>;
+  author?: Maybe<UserUpdateOneRequiredWithoutFriendsInput>;
+  chatRoomId?: Maybe<String>;
+  permission?: Maybe<Boolean>;
+}
+
+export interface FriendCreateManyWithoutAuthorInput {
   create?: Maybe<
     FriendCreateWithoutAuthorInput[] | FriendCreateWithoutAuthorInput
   >;
-  delete?: Maybe<FriendWhereUniqueInput[] | FriendWhereUniqueInput>;
   connect?: Maybe<FriendWhereUniqueInput[] | FriendWhereUniqueInput>;
-  set?: Maybe<FriendWhereUniqueInput[] | FriendWhereUniqueInput>;
-  disconnect?: Maybe<FriendWhereUniqueInput[] | FriendWhereUniqueInput>;
-  update?: Maybe<
-    | FriendUpdateWithWhereUniqueWithoutAuthorInput[]
-    | FriendUpdateWithWhereUniqueWithoutAuthorInput
-  >;
-  upsert?: Maybe<
-    | FriendUpsertWithWhereUniqueWithoutAuthorInput[]
-    | FriendUpsertWithWhereUniqueWithoutAuthorInput
-  >;
-  deleteMany?: Maybe<FriendScalarWhereInput[] | FriendScalarWhereInput>;
-  updateMany?: Maybe<
-    | FriendUpdateManyWithWhereNestedInput[]
-    | FriendUpdateManyWithWhereNestedInput
-  >;
 }
 
-export type FileWhereUniqueInput = AtLeastOne<{
-  id: Maybe<ID_Input>;
-}>;
+export interface FriendSubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<FriendWhereInput>;
+  AND?: Maybe<FriendSubscriptionWhereInput[] | FriendSubscriptionWhereInput>;
+  OR?: Maybe<FriendSubscriptionWhereInput[] | FriendSubscriptionWhereInput>;
+  NOT?: Maybe<FriendSubscriptionWhereInput[] | FriendSubscriptionWhereInput>;
+}
 
-export interface FriendUpsertWithWhereUniqueWithoutAuthorInput {
-  where: FriendWhereUniqueInput;
-  update: FriendUpdateWithoutAuthorDataInput;
-  create: FriendCreateWithoutAuthorInput;
+export interface FileSubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<FileWhereInput>;
+  AND?: Maybe<FileSubscriptionWhereInput[] | FileSubscriptionWhereInput>;
+  OR?: Maybe<FileSubscriptionWhereInput[] | FileSubscriptionWhereInput>;
+  NOT?: Maybe<FileSubscriptionWhereInput[] | FileSubscriptionWhereInput>;
+}
+
+export interface FriendUpdateManyDataInput {
+  nickname?: Maybe<String>;
+  firstName?: Maybe<String>;
+  lastName?: Maybe<String>;
+  friendId?: Maybe<String>;
+  chatRoomId?: Maybe<String>;
+  permission?: Maybe<Boolean>;
+}
+
+export interface FileCreateInput {
+  filename: String;
+  mimetype: String;
+  encoding: String;
 }
 
 export interface FriendWhereInput {
@@ -349,6 +442,12 @@ export interface FriendWhereInput {
   NOT?: Maybe<FriendWhereInput[] | FriendWhereInput>;
 }
 
+export interface FileUpdateManyMutationInput {
+  filename?: Maybe<String>;
+  mimetype?: Maybe<String>;
+  encoding?: Maybe<String>;
+}
+
 export interface FriendScalarWhereInput {
   id?: Maybe<ID_Input>;
   id_not?: Maybe<ID_Input>;
@@ -441,45 +540,41 @@ export interface FriendScalarWhereInput {
   NOT?: Maybe<FriendScalarWhereInput[] | FriendScalarWhereInput>;
 }
 
-export interface FileWhereInput {
-  id?: Maybe<ID_Input>;
-  id_not?: Maybe<ID_Input>;
-  id_in?: Maybe<ID_Input[] | ID_Input>;
-  id_not_in?: Maybe<ID_Input[] | ID_Input>;
-  id_lt?: Maybe<ID_Input>;
-  id_lte?: Maybe<ID_Input>;
-  id_gt?: Maybe<ID_Input>;
-  id_gte?: Maybe<ID_Input>;
-  id_contains?: Maybe<ID_Input>;
-  id_not_contains?: Maybe<ID_Input>;
-  id_starts_with?: Maybe<ID_Input>;
-  id_not_starts_with?: Maybe<ID_Input>;
-  id_ends_with?: Maybe<ID_Input>;
-  id_not_ends_with?: Maybe<ID_Input>;
-  encoding?: Maybe<String>;
-  encoding_not?: Maybe<String>;
-  encoding_in?: Maybe<String[] | String>;
-  encoding_not_in?: Maybe<String[] | String>;
-  encoding_lt?: Maybe<String>;
-  encoding_lte?: Maybe<String>;
-  encoding_gt?: Maybe<String>;
-  encoding_gte?: Maybe<String>;
-  encoding_contains?: Maybe<String>;
-  encoding_not_contains?: Maybe<String>;
-  encoding_starts_with?: Maybe<String>;
-  encoding_not_starts_with?: Maybe<String>;
-  encoding_ends_with?: Maybe<String>;
-  encoding_not_ends_with?: Maybe<String>;
-  author?: Maybe<UserWhereInput>;
-  AND?: Maybe<FileWhereInput[] | FileWhereInput>;
-  OR?: Maybe<FileWhereInput[] | FileWhereInput>;
-  NOT?: Maybe<FileWhereInput[] | FileWhereInput>;
+export interface UserCreateInput {
+  nickname?: Maybe<String>;
+  firstName: String;
+  lastName: String;
+  email: String;
+  password: String;
+  birthday?: Maybe<DateTimeInput>;
+  phoneNumber?: Maybe<String>;
+  friends?: Maybe<FriendCreateManyWithoutAuthorInput>;
+  biography?: Maybe<String>;
+  profileFile?: Maybe<FileCreateOneInput>;
 }
 
-export interface UserCreateOneWithoutProfileFileInput {
-  create?: Maybe<UserCreateWithoutProfileFileInput>;
-  connect?: Maybe<UserWhereUniqueInput>;
+export interface FriendUpdateWithoutAuthorDataInput {
+  nickname?: Maybe<String>;
+  firstName?: Maybe<String>;
+  lastName?: Maybe<String>;
+  friendId?: Maybe<String>;
+  chatRoomId?: Maybe<String>;
+  permission?: Maybe<Boolean>;
 }
+
+export interface FriendUpdateManyMutationInput {
+  nickname?: Maybe<String>;
+  firstName?: Maybe<String>;
+  lastName?: Maybe<String>;
+  friendId?: Maybe<String>;
+  chatRoomId?: Maybe<String>;
+  permission?: Maybe<Boolean>;
+}
+
+export type UserWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+  email?: Maybe<String>;
+}>;
 
 export interface FriendCreateInput {
   nickname?: Maybe<String>;
@@ -491,48 +586,20 @@ export interface FriendCreateInput {
   permission?: Maybe<Boolean>;
 }
 
-export interface UserCreateWithoutProfileFileInput {
-  nickname?: Maybe<String>;
-  firstName: String;
-  lastName: String;
-  email: String;
-  password: String;
-  birthday?: Maybe<DateTimeInput>;
-  phoneNumber?: Maybe<String>;
-  friends?: Maybe<FriendCreateManyWithoutAuthorInput>;
-  biography?: Maybe<String>;
-}
-
-export interface FriendUpdateManyWithWhereNestedInput {
-  where: FriendScalarWhereInput;
-  data: FriendUpdateManyDataInput;
-}
-
-export interface FriendCreateManyWithoutAuthorInput {
-  create?: Maybe<
-    FriendCreateWithoutAuthorInput[] | FriendCreateWithoutAuthorInput
-  >;
-  connect?: Maybe<FriendWhereUniqueInput[] | FriendWhereUniqueInput>;
-}
-
-export interface FriendSubscriptionWhereInput {
+export interface UserSubscriptionWhereInput {
   mutation_in?: Maybe<MutationType[] | MutationType>;
   updatedFields_contains?: Maybe<String>;
   updatedFields_contains_every?: Maybe<String[] | String>;
   updatedFields_contains_some?: Maybe<String[] | String>;
-  node?: Maybe<FriendWhereInput>;
-  AND?: Maybe<FriendSubscriptionWhereInput[] | FriendSubscriptionWhereInput>;
-  OR?: Maybe<FriendSubscriptionWhereInput[] | FriendSubscriptionWhereInput>;
-  NOT?: Maybe<FriendSubscriptionWhereInput[] | FriendSubscriptionWhereInput>;
+  node?: Maybe<UserWhereInput>;
+  AND?: Maybe<UserSubscriptionWhereInput[] | UserSubscriptionWhereInput>;
+  OR?: Maybe<UserSubscriptionWhereInput[] | UserSubscriptionWhereInput>;
+  NOT?: Maybe<UserSubscriptionWhereInput[] | UserSubscriptionWhereInput>;
 }
 
-export interface FriendCreateWithoutAuthorInput {
-  nickname?: Maybe<String>;
-  firstName: String;
-  lastName: String;
-  friendId: String;
-  chatRoomId: String;
-  permission?: Maybe<Boolean>;
+export interface UserUpsertWithoutFriendsInput {
+  update: UserUpdateWithoutFriendsDataInput;
+  create: UserCreateWithoutFriendsInput;
 }
 
 export interface UserUpdateManyMutationInput {
@@ -546,12 +613,7 @@ export interface UserUpdateManyMutationInput {
   biography?: Maybe<String>;
 }
 
-export interface FileUpdateInput {
-  encoding?: Maybe<String>;
-  author?: Maybe<UserUpdateOneRequiredWithoutProfileFileInput>;
-}
-
-export interface UserCreateInput {
+export interface UserCreateWithoutFriendsInput {
   nickname?: Maybe<String>;
   firstName: String;
   lastName: String;
@@ -559,93 +621,8 @@ export interface UserCreateInput {
   password: String;
   birthday?: Maybe<DateTimeInput>;
   phoneNumber?: Maybe<String>;
-  friends?: Maybe<FriendCreateManyWithoutAuthorInput>;
   biography?: Maybe<String>;
-  profileFile?: Maybe<FileCreateOneWithoutAuthorInput>;
-}
-
-export interface UserUpdateOneRequiredWithoutProfileFileInput {
-  create?: Maybe<UserCreateWithoutProfileFileInput>;
-  update?: Maybe<UserUpdateWithoutProfileFileDataInput>;
-  upsert?: Maybe<UserUpsertWithoutProfileFileInput>;
-  connect?: Maybe<UserWhereUniqueInput>;
-}
-
-export interface FriendUpdateManyMutationInput {
-  nickname?: Maybe<String>;
-  firstName?: Maybe<String>;
-  lastName?: Maybe<String>;
-  friendId?: Maybe<String>;
-  chatRoomId?: Maybe<String>;
-  permission?: Maybe<Boolean>;
-}
-
-export interface UserUpdateWithoutProfileFileDataInput {
-  nickname?: Maybe<String>;
-  firstName?: Maybe<String>;
-  lastName?: Maybe<String>;
-  email?: Maybe<String>;
-  password?: Maybe<String>;
-  birthday?: Maybe<DateTimeInput>;
-  phoneNumber?: Maybe<String>;
-  friends?: Maybe<FriendUpdateManyWithoutAuthorInput>;
-  biography?: Maybe<String>;
-}
-
-export interface FileUpsertWithoutAuthorInput {
-  update: FileUpdateWithoutAuthorDataInput;
-  create: FileCreateWithoutAuthorInput;
-}
-
-export interface FriendUpdateInput {
-  nickname?: Maybe<String>;
-  firstName?: Maybe<String>;
-  lastName?: Maybe<String>;
-  friendId?: Maybe<String>;
-  author?: Maybe<UserUpdateOneRequiredWithoutFriendsInput>;
-  chatRoomId?: Maybe<String>;
-  permission?: Maybe<Boolean>;
-}
-
-export interface FileUpdateWithoutAuthorDataInput {
-  encoding?: Maybe<String>;
-}
-
-export interface FriendUpdateWithWhereUniqueWithoutAuthorInput {
-  where: FriendWhereUniqueInput;
-  data: FriendUpdateWithoutAuthorDataInput;
-}
-
-export interface UserUpdateWithoutFriendsDataInput {
-  nickname?: Maybe<String>;
-  firstName?: Maybe<String>;
-  lastName?: Maybe<String>;
-  email?: Maybe<String>;
-  password?: Maybe<String>;
-  birthday?: Maybe<DateTimeInput>;
-  phoneNumber?: Maybe<String>;
-  biography?: Maybe<String>;
-  profileFile?: Maybe<FileUpdateOneWithoutAuthorInput>;
-}
-
-export interface FriendUpdateWithoutAuthorDataInput {
-  nickname?: Maybe<String>;
-  firstName?: Maybe<String>;
-  lastName?: Maybe<String>;
-  friendId?: Maybe<String>;
-  chatRoomId?: Maybe<String>;
-  permission?: Maybe<Boolean>;
-}
-
-export interface UserSubscriptionWhereInput {
-  mutation_in?: Maybe<MutationType[] | MutationType>;
-  updatedFields_contains?: Maybe<String>;
-  updatedFields_contains_every?: Maybe<String[] | String>;
-  updatedFields_contains_some?: Maybe<String[] | String>;
-  node?: Maybe<UserWhereInput>;
-  AND?: Maybe<UserSubscriptionWhereInput[] | UserSubscriptionWhereInput>;
-  OR?: Maybe<UserSubscriptionWhereInput[] | UserSubscriptionWhereInput>;
-  NOT?: Maybe<UserSubscriptionWhereInput[] | UserSubscriptionWhereInput>;
+  profileFile?: Maybe<FileCreateOneInput>;
 }
 
 export interface UserWhereInput {
@@ -778,7 +755,24 @@ export interface UserWhereInput {
   NOT?: Maybe<UserWhereInput[] | UserWhereInput>;
 }
 
-export interface UserUpdateInput {
+export interface FileCreateOneInput {
+  create?: Maybe<FileCreateInput>;
+}
+
+export interface FriendUpdateWithWhereUniqueWithoutAuthorInput {
+  where: FriendWhereUniqueInput;
+  data: FriendUpdateWithoutAuthorDataInput;
+}
+
+export interface FileUpdateOneInput {
+  create?: Maybe<FileCreateInput>;
+  update?: Maybe<FileUpdateDataInput>;
+  upsert?: Maybe<FileUpsertNestedInput>;
+  delete?: Maybe<Boolean>;
+  disconnect?: Maybe<Boolean>;
+}
+
+export interface UserUpdateWithoutFriendsDataInput {
   nickname?: Maybe<String>;
   firstName?: Maybe<String>;
   lastName?: Maybe<String>;
@@ -786,83 +780,8 @@ export interface UserUpdateInput {
   password?: Maybe<String>;
   birthday?: Maybe<DateTimeInput>;
   phoneNumber?: Maybe<String>;
-  friends?: Maybe<FriendUpdateManyWithoutAuthorInput>;
   biography?: Maybe<String>;
-  profileFile?: Maybe<FileUpdateOneWithoutAuthorInput>;
-}
-
-export interface FileCreateWithoutAuthorInput {
-  encoding: String;
-}
-
-export interface UserUpsertWithoutFriendsInput {
-  update: UserUpdateWithoutFriendsDataInput;
-  create: UserCreateWithoutFriendsInput;
-}
-
-export interface FileCreateOneWithoutAuthorInput {
-  create?: Maybe<FileCreateWithoutAuthorInput>;
-  connect?: Maybe<FileWhereUniqueInput>;
-}
-
-export interface FileUpdateOneWithoutAuthorInput {
-  create?: Maybe<FileCreateWithoutAuthorInput>;
-  update?: Maybe<FileUpdateWithoutAuthorDataInput>;
-  upsert?: Maybe<FileUpsertWithoutAuthorInput>;
-  delete?: Maybe<Boolean>;
-  disconnect?: Maybe<Boolean>;
-  connect?: Maybe<FileWhereUniqueInput>;
-}
-
-export interface FriendUpdateManyDataInput {
-  nickname?: Maybe<String>;
-  firstName?: Maybe<String>;
-  lastName?: Maybe<String>;
-  friendId?: Maybe<String>;
-  chatRoomId?: Maybe<String>;
-  permission?: Maybe<Boolean>;
-}
-
-export interface FileCreateInput {
-  encoding: String;
-  author: UserCreateOneWithoutProfileFileInput;
-}
-
-export interface UserCreateOneWithoutFriendsInput {
-  create?: Maybe<UserCreateWithoutFriendsInput>;
-  connect?: Maybe<UserWhereUniqueInput>;
-}
-
-export interface UserCreateWithoutFriendsInput {
-  nickname?: Maybe<String>;
-  firstName: String;
-  lastName: String;
-  email: String;
-  password: String;
-  birthday?: Maybe<DateTimeInput>;
-  phoneNumber?: Maybe<String>;
-  biography?: Maybe<String>;
-  profileFile?: Maybe<FileCreateOneWithoutAuthorInput>;
-}
-
-export interface FileUpdateManyMutationInput {
-  encoding?: Maybe<String>;
-}
-
-export interface UserUpsertWithoutProfileFileInput {
-  update: UserUpdateWithoutProfileFileDataInput;
-  create: UserCreateWithoutProfileFileInput;
-}
-
-export interface FileSubscriptionWhereInput {
-  mutation_in?: Maybe<MutationType[] | MutationType>;
-  updatedFields_contains?: Maybe<String>;
-  updatedFields_contains_every?: Maybe<String[] | String>;
-  updatedFields_contains_some?: Maybe<String[] | String>;
-  node?: Maybe<FileWhereInput>;
-  AND?: Maybe<FileSubscriptionWhereInput[] | FileSubscriptionWhereInput>;
-  OR?: Maybe<FileSubscriptionWhereInput[] | FileSubscriptionWhereInput>;
-  NOT?: Maybe<FileSubscriptionWhereInput[] | FileSubscriptionWhereInput>;
+  profileFile?: Maybe<FileUpdateOneInput>;
 }
 
 export interface UserUpdateOneRequiredWithoutFriendsInput {
@@ -872,10 +791,44 @@ export interface UserUpdateOneRequiredWithoutFriendsInput {
   connect?: Maybe<UserWhereUniqueInput>;
 }
 
-export type UserWhereUniqueInput = AtLeastOne<{
-  id: Maybe<ID_Input>;
-  email?: Maybe<String>;
-}>;
+export interface FileUpsertNestedInput {
+  update: FileUpdateDataInput;
+  create: FileCreateInput;
+}
+
+export interface FriendUpdateManyWithoutAuthorInput {
+  create?: Maybe<
+    FriendCreateWithoutAuthorInput[] | FriendCreateWithoutAuthorInput
+  >;
+  delete?: Maybe<FriendWhereUniqueInput[] | FriendWhereUniqueInput>;
+  connect?: Maybe<FriendWhereUniqueInput[] | FriendWhereUniqueInput>;
+  set?: Maybe<FriendWhereUniqueInput[] | FriendWhereUniqueInput>;
+  disconnect?: Maybe<FriendWhereUniqueInput[] | FriendWhereUniqueInput>;
+  update?: Maybe<
+    | FriendUpdateWithWhereUniqueWithoutAuthorInput[]
+    | FriendUpdateWithWhereUniqueWithoutAuthorInput
+  >;
+  upsert?: Maybe<
+    | FriendUpsertWithWhereUniqueWithoutAuthorInput[]
+    | FriendUpsertWithWhereUniqueWithoutAuthorInput
+  >;
+  deleteMany?: Maybe<FriendScalarWhereInput[] | FriendScalarWhereInput>;
+  updateMany?: Maybe<
+    | FriendUpdateManyWithWhereNestedInput[]
+    | FriendUpdateManyWithWhereNestedInput
+  >;
+}
+
+export interface FriendUpsertWithWhereUniqueWithoutAuthorInput {
+  where: FriendWhereUniqueInput;
+  update: FriendUpdateWithoutAuthorDataInput;
+  create: FriendCreateWithoutAuthorInput;
+}
+
+export interface FriendUpdateManyWithWhereNestedInput {
+  where: FriendScalarWhereInput;
+  data: FriendUpdateManyDataInput;
+}
 
 export type FriendWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;
@@ -925,21 +878,118 @@ export interface UserPreviousValuesSubscription
   biography: () => Promise<AsyncIterator<String>>;
 }
 
-export interface FriendEdge {
-  node: Friend;
+export interface FriendConnection {
+  pageInfo: PageInfo;
+  edges: FriendEdge[];
+}
+
+export interface FriendConnectionPromise
+  extends Promise<FriendConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<FriendEdge>>() => T;
+  aggregate: <T = AggregateFriendPromise>() => T;
+}
+
+export interface FriendConnectionSubscription
+  extends Promise<AsyncIterator<FriendConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<FriendEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateFriendSubscription>() => T;
+}
+
+export interface AggregateFile {
+  count: Int;
+}
+
+export interface AggregateFilePromise
+  extends Promise<AggregateFile>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateFileSubscription
+  extends Promise<AsyncIterator<AggregateFile>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface FileConnection {
+  pageInfo: PageInfo;
+  edges: FileEdge[];
+}
+
+export interface FileConnectionPromise
+  extends Promise<FileConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<FileEdge>>() => T;
+  aggregate: <T = AggregateFilePromise>() => T;
+}
+
+export interface FileConnectionSubscription
+  extends Promise<AsyncIterator<FileConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<FileEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateFileSubscription>() => T;
+}
+
+export interface PageInfo {
+  hasNextPage: Boolean;
+  hasPreviousPage: Boolean;
+  startCursor?: String;
+  endCursor?: String;
+}
+
+export interface PageInfoPromise extends Promise<PageInfo>, Fragmentable {
+  hasNextPage: () => Promise<Boolean>;
+  hasPreviousPage: () => Promise<Boolean>;
+  startCursor: () => Promise<String>;
+  endCursor: () => Promise<String>;
+}
+
+export interface PageInfoSubscription
+  extends Promise<AsyncIterator<PageInfo>>,
+    Fragmentable {
+  hasNextPage: () => Promise<AsyncIterator<Boolean>>;
+  hasPreviousPage: () => Promise<AsyncIterator<Boolean>>;
+  startCursor: () => Promise<AsyncIterator<String>>;
+  endCursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface FileEdge {
+  node: File;
   cursor: String;
 }
 
-export interface FriendEdgePromise extends Promise<FriendEdge>, Fragmentable {
-  node: <T = FriendPromise>() => T;
+export interface FileEdgePromise extends Promise<FileEdge>, Fragmentable {
+  node: <T = FilePromise>() => T;
   cursor: () => Promise<String>;
 }
 
-export interface FriendEdgeSubscription
-  extends Promise<AsyncIterator<FriendEdge>>,
+export interface FileEdgeSubscription
+  extends Promise<AsyncIterator<FileEdge>>,
     Fragmentable {
-  node: <T = FriendSubscription>() => T;
+  node: <T = FileSubscription>() => T;
   cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface BatchPayload {
+  count: Long;
+}
+
+export interface BatchPayloadPromise
+  extends Promise<BatchPayload>,
+    Fragmentable {
+  count: () => Promise<Long>;
+}
+
+export interface BatchPayloadSubscription
+  extends Promise<AsyncIterator<BatchPayload>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Long>>;
 }
 
 export interface User {
@@ -1024,57 +1074,21 @@ export interface UserNullablePromise
   profileFile: <T = FilePromise>() => T;
 }
 
-export interface FriendConnection {
-  pageInfo: PageInfo;
-  edges: FriendEdge[];
+export interface UserEdge {
+  node: User;
+  cursor: String;
 }
 
-export interface FriendConnectionPromise
-  extends Promise<FriendConnection>,
+export interface UserEdgePromise extends Promise<UserEdge>, Fragmentable {
+  node: <T = UserPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface UserEdgeSubscription
+  extends Promise<AsyncIterator<UserEdge>>,
     Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<FriendEdge>>() => T;
-  aggregate: <T = AggregateFriendPromise>() => T;
-}
-
-export interface FriendConnectionSubscription
-  extends Promise<AsyncIterator<FriendConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<FriendEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateFriendSubscription>() => T;
-}
-
-export interface AggregateFile {
-  count: Int;
-}
-
-export interface AggregateFilePromise
-  extends Promise<AggregateFile>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateFileSubscription
-  extends Promise<AsyncIterator<AggregateFile>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface BatchPayload {
-  count: Long;
-}
-
-export interface BatchPayloadPromise
-  extends Promise<BatchPayload>,
-    Fragmentable {
-  count: () => Promise<Long>;
-}
-
-export interface BatchPayloadSubscription
-  extends Promise<AsyncIterator<BatchPayload>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Long>>;
+  node: <T = UserSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
 }
 
 export interface Friend {
@@ -1124,115 +1138,70 @@ export interface FriendNullablePromise
   permission: () => Promise<Boolean>;
 }
 
-export interface FileEdge {
-  node: File;
+export interface File {
+  filename: String;
+  mimetype: String;
+  encoding: String;
+}
+
+export interface FilePromise extends Promise<File>, Fragmentable {
+  filename: () => Promise<String>;
+  mimetype: () => Promise<String>;
+  encoding: () => Promise<String>;
+}
+
+export interface FileSubscription
+  extends Promise<AsyncIterator<File>>,
+    Fragmentable {
+  filename: () => Promise<AsyncIterator<String>>;
+  mimetype: () => Promise<AsyncIterator<String>>;
+  encoding: () => Promise<AsyncIterator<String>>;
+}
+
+export interface FileNullablePromise
+  extends Promise<File | null>,
+    Fragmentable {
+  filename: () => Promise<String>;
+  mimetype: () => Promise<String>;
+  encoding: () => Promise<String>;
+}
+
+export interface FriendEdge {
+  node: Friend;
   cursor: String;
 }
 
-export interface FileEdgePromise extends Promise<FileEdge>, Fragmentable {
-  node: <T = FilePromise>() => T;
+export interface FriendEdgePromise extends Promise<FriendEdge>, Fragmentable {
+  node: <T = FriendPromise>() => T;
   cursor: () => Promise<String>;
 }
 
-export interface FileEdgeSubscription
-  extends Promise<AsyncIterator<FileEdge>>,
+export interface FriendEdgeSubscription
+  extends Promise<AsyncIterator<FriendEdge>>,
     Fragmentable {
-  node: <T = FileSubscription>() => T;
+  node: <T = FriendSubscription>() => T;
   cursor: () => Promise<AsyncIterator<String>>;
 }
 
-export interface AggregateUser {
-  count: Int;
-}
-
-export interface AggregateUserPromise
-  extends Promise<AggregateUser>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateUserSubscription
-  extends Promise<AsyncIterator<AggregateUser>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface PageInfo {
-  hasNextPage: Boolean;
-  hasPreviousPage: Boolean;
-  startCursor?: String;
-  endCursor?: String;
-}
-
-export interface PageInfoPromise extends Promise<PageInfo>, Fragmentable {
-  hasNextPage: () => Promise<Boolean>;
-  hasPreviousPage: () => Promise<Boolean>;
-  startCursor: () => Promise<String>;
-  endCursor: () => Promise<String>;
-}
-
-export interface PageInfoSubscription
-  extends Promise<AsyncIterator<PageInfo>>,
-    Fragmentable {
-  hasNextPage: () => Promise<AsyncIterator<Boolean>>;
-  hasPreviousPage: () => Promise<AsyncIterator<Boolean>>;
-  startCursor: () => Promise<AsyncIterator<String>>;
-  endCursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface UserConnection {
-  pageInfo: PageInfo;
-  edges: UserEdge[];
-}
-
-export interface UserConnectionPromise
-  extends Promise<UserConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<UserEdge>>() => T;
-  aggregate: <T = AggregateUserPromise>() => T;
-}
-
-export interface UserConnectionSubscription
-  extends Promise<AsyncIterator<UserConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<UserEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateUserSubscription>() => T;
-}
-
-export interface AggregateFriend {
-  count: Int;
-}
-
-export interface AggregateFriendPromise
-  extends Promise<AggregateFriend>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateFriendSubscription
-  extends Promise<AsyncIterator<AggregateFriend>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
 export interface FilePreviousValues {
-  id: ID_Output;
+  filename: String;
+  mimetype: String;
   encoding: String;
 }
 
 export interface FilePreviousValuesPromise
   extends Promise<FilePreviousValues>,
     Fragmentable {
-  id: () => Promise<ID_Output>;
+  filename: () => Promise<String>;
+  mimetype: () => Promise<String>;
   encoding: () => Promise<String>;
 }
 
 export interface FilePreviousValuesSubscription
   extends Promise<AsyncIterator<FilePreviousValues>>,
     Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
+  filename: () => Promise<AsyncIterator<String>>;
+  mimetype: () => Promise<AsyncIterator<String>>;
   encoding: () => Promise<AsyncIterator<String>>;
 }
 
@@ -1261,79 +1230,6 @@ export interface FileSubscriptionPayloadSubscription
   previousValues: <T = FilePreviousValuesSubscription>() => T;
 }
 
-export interface File {
-  id: ID_Output;
-  encoding: String;
-}
-
-export interface FilePromise extends Promise<File>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  encoding: () => Promise<String>;
-  author: <T = UserPromise>() => T;
-}
-
-export interface FileSubscription
-  extends Promise<AsyncIterator<File>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  encoding: () => Promise<AsyncIterator<String>>;
-  author: <T = UserSubscription>() => T;
-}
-
-export interface FileNullablePromise
-  extends Promise<File | null>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  encoding: () => Promise<String>;
-  author: <T = UserPromise>() => T;
-}
-
-export interface FileConnection {
-  pageInfo: PageInfo;
-  edges: FileEdge[];
-}
-
-export interface FileConnectionPromise
-  extends Promise<FileConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<FileEdge>>() => T;
-  aggregate: <T = AggregateFilePromise>() => T;
-}
-
-export interface FileConnectionSubscription
-  extends Promise<AsyncIterator<FileConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<FileEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateFileSubscription>() => T;
-}
-
-export interface UserSubscriptionPayload {
-  mutation: MutationType;
-  node: User;
-  updatedFields: String[];
-  previousValues: UserPreviousValues;
-}
-
-export interface UserSubscriptionPayloadPromise
-  extends Promise<UserSubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = UserPromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = UserPreviousValuesPromise>() => T;
-}
-
-export interface UserSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<UserSubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = UserSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = UserPreviousValuesSubscription>() => T;
-}
-
 export interface FriendSubscriptionPayload {
   mutation: MutationType;
   node: Friend;
@@ -1357,23 +1253,6 @@ export interface FriendSubscriptionPayloadSubscription
   node: <T = FriendSubscription>() => T;
   updatedFields: () => Promise<AsyncIterator<String[]>>;
   previousValues: <T = FriendPreviousValuesSubscription>() => T;
-}
-
-export interface UserEdge {
-  node: User;
-  cursor: String;
-}
-
-export interface UserEdgePromise extends Promise<UserEdge>, Fragmentable {
-  node: <T = UserPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface UserEdgeSubscription
-  extends Promise<AsyncIterator<UserEdge>>,
-    Fragmentable {
-  node: <T = UserSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
 }
 
 export interface FriendPreviousValues {
@@ -1410,6 +1289,84 @@ export interface FriendPreviousValuesSubscription
   permission: () => Promise<AsyncIterator<Boolean>>;
 }
 
+export interface UserSubscriptionPayload {
+  mutation: MutationType;
+  node: User;
+  updatedFields: String[];
+  previousValues: UserPreviousValues;
+}
+
+export interface UserSubscriptionPayloadPromise
+  extends Promise<UserSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = UserPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = UserPreviousValuesPromise>() => T;
+}
+
+export interface UserSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<UserSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = UserSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = UserPreviousValuesSubscription>() => T;
+}
+
+export interface AggregateFriend {
+  count: Int;
+}
+
+export interface AggregateFriendPromise
+  extends Promise<AggregateFriend>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateFriendSubscription
+  extends Promise<AsyncIterator<AggregateFriend>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface UserConnection {
+  pageInfo: PageInfo;
+  edges: UserEdge[];
+}
+
+export interface UserConnectionPromise
+  extends Promise<UserConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<UserEdge>>() => T;
+  aggregate: <T = AggregateUserPromise>() => T;
+}
+
+export interface UserConnectionSubscription
+  extends Promise<AsyncIterator<UserConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<UserEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateUserSubscription>() => T;
+}
+
+export interface AggregateUser {
+  count: Int;
+}
+
+export interface AggregateUserPromise
+  extends Promise<AggregateUser>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateUserSubscription
+  extends Promise<AsyncIterator<AggregateUser>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
 /*
 DateTime scalar input type, allowing Date
 */
@@ -1420,17 +1377,17 @@ DateTime scalar output type, which is always a string
 */
 export type DateTimeOutput = string;
 
-export type Long = string;
-
-/*
-The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1.
-*/
-export type Int = number;
-
 /*
 The `Boolean` scalar type represents `true` or `false`.
 */
 export type Boolean = boolean;
+
+export type Long = string;
+
+/*
+The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
+*/
+export type String = string;
 
 /*
 The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as `"4"`) or integer (such as `4`) input value will be accepted as an ID.
@@ -1439,9 +1396,9 @@ export type ID_Input = string | number;
 export type ID_Output = string;
 
 /*
-The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
+The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1.
 */
-export type String = string;
+export type Int = number;
 
 /**
  * Model Metadata
