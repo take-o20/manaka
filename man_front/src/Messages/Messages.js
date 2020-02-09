@@ -16,6 +16,7 @@ const Messages = ({
       const log = logs
       obj.key = 'key_' + (log.length+1)
       log.unshift(obj)
+      console.log(log === logs)
       setLogs(log)
       setMessages(
         logs.map(e => {
