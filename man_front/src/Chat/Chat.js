@@ -3,6 +3,7 @@ import Popup from "reactjs-popup";
 import { useHistory } from "react-router-dom";
 import gql from "graphql-tag";
 import { useMutation } from '@apollo/react-hooks';
+import { ScrollTo, ScrollArea } from "react-scroll-to";
 
 import Messages from '../Messages/Messages'
 import PostMessage from '../PostMessage/PostMessage'
@@ -15,13 +16,9 @@ const USER_UPDATE = gql`
     }
   }
 `
-
 const Chat = (props) => {
-  const pathId = props.match.params.id
-  const decode = jwt.verify(pathId,process.env.REACT_APP_PATH_KEY)
-  const {userId, userName, friendId, friendName, 
-         chatRoomId, iat, id} = decode
-  let {permission} = decode
+  console.log(props)
+  const {id,chatRoomId,permission,myId} = props
   const history = useHistory();
   const [ friendUpdate,{data, loading, error},] = useMutation(USER_UPDATE);
 
@@ -39,8 +36,8 @@ const Chat = (props) => {
                     closeOnEscape={false}
                 >{ close =>(
                     <div>
-                      <h2>{friendName} <br/>added you to Friend</h2>
-                      <h3>Do you accept {friendName}?</h3>
+                      <h2> <br/>added you to Friend</h2>
+                      <h3>Do you accept ?</h3>
                     <button
                       className="button"
                       onClick={() => {
@@ -58,13 +55,13 @@ const Chat = (props) => {
                     </div>)}
                 </Popup>
   return(
-    <div style={{ textAlign: "center"}}>
-      <h2>Friend Name:{friendName}</h2>
+    <div>
       {!permission ? modal: ''}
-      <Messages userId={userId} userName={userName} friendName={friendName} chatRoomId={chatRoomId}/>
-      <PostMessage userId={userId} userName={userName} friendName={friendName} chatRoomId={chatRoomId}/>
+      <Messages userId={id}  chatRoomId={chatRoomId} myId={myId}/>
+      <PostMessage userId={id} chatRoomId={chatRoomId} myId={myId} />
     </div>
   )
 }
 
 export default Chat
+

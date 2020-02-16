@@ -1,12 +1,50 @@
 .yourMessage{
   position: relative;
-  margin-left: 35%;
-  margin-bottom: 20px;
-  color:blue;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  padding: 10px;
+  color:white;
+  background-color: #2e7cff;
+  text-align: left;
+  border-radius: 8px;
 }
 .friendMessage{
+  width: 39%;
   position: relative;
-  margin-right: 35%;
-  margin-bottom: 20px;
-  color: red;
+  color: gray;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding-top: 7px;
+  padding-bottom: 7px;
+  padding-left: 7px;
+}
+.yourMessageTime {
+  text-align: left;
+  font-size: 12px;
+}
+.message{
+  margin-bottom: 10px;
+  text-align: left;
+  overflow: hidden;
+}
+.photo{
+  position: relative;
+  margin-left: 1%;
+  padding:5px;
+  width:60px;
+  height: 60px;
+  border-radius: 50%;
+  float: left;
+}
+.friendMessageTime{
+  overflow: hidden;
+  font-size: 12px;
+}
+.yourPad{
+  margin-left: 50%;
+}
+
+.friPad{
+  margin-left: 8%;
+  overflow: hidden;
 }

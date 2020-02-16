@@ -21,7 +21,7 @@ import Chat from './Chat/Chat'
 import EditProfile from './EditProfile/EditProfile'
 import Ex from './Ex/Ex'
 import Ex1 from './Ex1/Ex1'
-
+import ScrollUp from './Messages/ScrollUp'
 const httpLink = new HttpLink({ uri: process.env.REACT_APP_GRAPHQL_END});
 
 const authMiddleware = new ApolloLink((operation, forward) => {
@@ -83,14 +83,16 @@ function App() {
       <Switch>
         {/* <Route exact path='/ex' component={Ex} /> */}
         <Route exact path="/home" component={Home}/>
+        <Route exact path="/home1" component={ScrollUp}/>
         <Route exact path='/ex1' component={Ex1}/>
         <Route exact path='/login' component={Login}/>
         <Route exact path='/signup' component={SignUp} />
         <Route exact path='/editprofile' component={EditProfile}/>
         <Auth>
           <Switch>
-            <Route exact path="/friendlist" component={FriendList}/>
-            <Route exact path='/chat/:id' component={Chat} />
+            <Route exact path="/friendlist/" component={FriendList}/>
+            <Route path="/friendlist/:id" component={FriendList}/>
+            {/* <Route exact path='/chat/:id' component={Chat} /> */}
             <Route exact path='/ex' component={Ex} />
             {/* <Route exact path="/page" component={Page}/> */}
           </Switch>

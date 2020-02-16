@@ -2,15 +2,18 @@ import React, {useEffect, useState} from 'react'
 import { useHistory } from "react-router-dom";
 import gql from "graphql-tag";
 import { useQuery } from '@apollo/react-hooks';
-const jwt = require('jsonwebtoken')
-
+import './FriendList.css'
+import Chat from '../Chat/Chat'
+import SplitPane, { Pane } from 'react-split-pane';
+import ScrollUp from "../Messages/ScrollUp"
 const GET_FRIENDS = gql`
   query getFriends($authorId: String!){
     friendslist(
-      authorId:$authorId
+      input:{authorId:$authorId}
     ){
       id
-      defaultName
+      firstName
+      lastName
       friendId
       chatRoomId
       permission
@@ -20,7 +23,7 @@ const GET_FRIENDS = gql`
 const friendslist = ({friends}) => {
   friends.map(e => (
   <div key={e.friendId}>
-  <span>{e.defaultName}</span>
+  <span>{e.firstName}</span>
   </div>
 ))}
 
@@ -29,7 +32,10 @@ const FriendList = (props) => {
   const {loading, error, data} = useQuery(GET_FRIENDS,{variables:{authorId: userId}})
   const history = useHistory();
   const [friendsList, setFriendsList] = useState([])
-
+  const [onChat, setOnchat] = useState(false)
+  const [chatRoomId, setChatRoomId] = useState()
+  const [permission, setPermission] = useState(false)
+  const [friendId, setFriendId] = useState()
   useEffect(() => {
     if(data){
       const list = data.friendslist
@@ -37,9 +43,14 @@ const FriendList = (props) => {
       setFriendsList(
         list.map(e =>{
           return (
-            <div key={e.friendId} style={{margin:15,fontWeight:600}}>
-              <span style={{marginRight:10, fontSize:20}}>{e.defaultName}</span>
-              <button onClick={() =>handleClick(e)}>Go to Talk Room</button>
+            <div key={e.friendId} className="friend">
+              <img src="https://pbs.twimg.com/profile_images/874276197357596672/kUuht00m_400x400.jpg" alt="friendphoto" className="friendPhoto"/>
+              <div className="friendName">{e.lastName} {e.firstName}</div>
+              <button 
+                className="buttonArea"
+                onClick={() =>handleClick(e)}
+              >
+                </button>
             </div>
           )      
         })
@@ -47,22 +58,21 @@ const FriendList = (props) => {
     }
   }, [data])
   const handleClick = (e) =>{
-    const pathId = jwt.sign({ 
-      userId: userId, 
-      userName: userName, 
-      friendId: e.friendId, 
-      friendName: e.defaultName,
-      chatRoomId: e.chatRoomId,
-      permission: e.permission,
-      id:e.id,
-    }, process.env.REACT_APP_PATH_KEY)
-    history.push('/chat/'+pathId)
+    const {id, firstName, lastName, friendId, chatRoomId, permission} = e
+    setChatRoomId(chatRoomId)
+    setPermission(permission)
+    setFriendId(id)
+    setOnchat(true)
   }
   return (
-    <div>
-      <h2 style={{textAlign: "center"}}>Your Friend List</h2>
-      <div style={{textAlign:"center"}}>
+    <div className="friends">
+      <div className="friendlist" style={{overflow:"scroll"}}>
+        <h2 className="recent">Recent</h2>
         {friendsList}
+      </div>
+
+      <div className="chat">
+        {onChat ? <Chat chatRoomId={chatRoomId} permission={permission} id={friendId} myId={userId}/> :null}
       </div>
     </div>
   )
